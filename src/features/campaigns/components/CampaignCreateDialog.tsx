@@ -1,0 +1,185 @@
+import { useState, useCallback } from "react";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Button,
+  Intent,
+  FormGroup,
+  InputGroup,
+  TextArea,
+  HTMLSelect,
+  Callout,
+  Classes,
+} from "@blueprintjs/core";
+import { useNavigate } from "react-router";
+import type { CampaignType } from "../types";
+import { createCampaign } from "../api/campaignApi";
+import { appToaster } from "../../../toaster";
+
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const CAMPAIGN_TYPE_OPTIONS = [
+  { value: "ELECTION", label: "Election" },
+  { value: "OPERATIONS", label: "Operations" },
+  { value: "SPECIAL_PROJECT", label: "Special Project" },
+];
+
+export default function CampaignCreateDialog({ isOpen, onClose }: Props) {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [campaignType, setCampaignType] = useState<CampaignType>("ELECTION");
+  const [targetStart, setTargetStart] = useState("");
+  const [targetCompletion, setTargetCompletion] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // BR-037: Validate target_start < target_completion in real-time
+  const dateError =
+    targetStart && targetCompletion && targetStart >= targetCompletion
+      ? "Target completion must be after the start date."
+      : null;
+
+  const isValid =
+    name.trim().length > 0 &&
+    description.trim().length > 0 &&
+    campaignType.length > 0 &&
+    targetStart.length > 0 &&
+    targetCompletion.length > 0 &&
+    !dateError;
+
+  const handleClose = useCallback(() => {
+    setName("");
+    setDescription("");
+    setCampaignType("ELECTION");
+    setTargetStart("");
+    setTargetCompletion("");
+    setError(null);
+    onClose();
+  }, [onClose]);
+
+  const handleSubmit = async () => {
+    if (!isValid) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const result = await createCampaign({
+        name: name.trim(),
+        description: description.trim(),
+        campaign_type: campaignType,
+        target_start: targetStart,
+        target_completion: targetCompletion,
+      });
+      // BR-038: Extended toast showing the project code, then navigate to detail page
+      const toaster = await appToaster;
+      toaster.show({
+        message: `Campaign created — Project Code: ${result.data.project_code}`,
+        intent: Intent.SUCCESS,
+        icon: "tick",
+        timeout: 6000,
+      });
+      handleClose();
+      navigate(`/campaigns/${result.data.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create campaign");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="New Campaign"
+      icon="flag"
+      style={{ width: 560 }}
+    >
+      <DialogBody>
+        {error && (
+          <Callout intent={Intent.DANGER} icon="error" style={{ marginBottom: 16 }}>
+            {error}
+          </Callout>
+        )}
+
+        <FormGroup label="Campaign Name" labelInfo="(required)">
+          <InputGroup
+            placeholder="e.g. Luzon Expansion 2026"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+        </FormGroup>
+
+        <FormGroup label="Description" labelInfo="(required)">
+          <TextArea
+            fill
+            rows={3}
+            placeholder="Describe the campaign's purpose and scope..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </FormGroup>
+
+        <FormGroup label="Campaign Type" labelInfo="(required)">
+          <HTMLSelect
+            fill
+            value={campaignType}
+            onChange={(e) => setCampaignType(e.target.value as CampaignType)}
+            options={CAMPAIGN_TYPE_OPTIONS}
+          />
+        </FormGroup>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <FormGroup label="Target Start" labelInfo="(required)">
+            <InputGroup
+              type="date"
+              value={targetStart}
+              onChange={(e) => setTargetStart(e.target.value)}
+              leftIcon="calendar"
+            />
+          </FormGroup>
+
+          <FormGroup
+            label="Target Completion"
+            labelInfo="(required)"
+            helperText={dateError ?? undefined}
+            intent={dateError ? Intent.DANGER : Intent.NONE}
+          >
+            <InputGroup
+              type="date"
+              value={targetCompletion}
+              onChange={(e) => setTargetCompletion(e.target.value)}
+              leftIcon="calendar"
+              intent={dateError ? Intent.DANGER : Intent.NONE}
+            />
+          </FormGroup>
+        </div>
+
+        <p className={Classes.TEXT_MUTED} style={{ fontSize: 12, marginTop: 8, marginBottom: 0 }}>
+          The project code will be auto-generated by the server after creation.
+        </p>
+      </DialogBody>
+
+      <DialogFooter
+        actions={
+          <>
+            <Button text="Cancel" onClick={handleClose} disabled={submitting} />
+            <Button
+              text="Create Campaign"
+              intent={Intent.PRIMARY}
+              onClick={handleSubmit}
+              loading={submitting}
+              disabled={!isValid}
+            />
+          </>
+        }
+      />
+    </Dialog>
+  );
+}
