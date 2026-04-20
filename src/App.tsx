@@ -24,6 +24,7 @@ import OfficesPage from "./features/offices/components/OfficesPage";
 import OfficeDetailPage from "./features/offices/components/OfficeDetailPage";
 import ResourcesPage from "./features/resources/components/ResourcesPage";
 import ResourceDetailPage from "./features/resources/components/ResourceDetailPage";
+import AnalyticsDashboard from "./screens/AnalyticsDashboard";
 
 function AuthGate() {
   const { isAuthenticated } = useApp();
@@ -62,6 +63,7 @@ function Shell() {
             <Route path="/offices/:id" element={<OfficeDetailPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/resources/:id" element={<ResourceDetailPage />} />
+            <Route path="/analytics" element={<AnalyticsDashboard />} />
           </Routes>
         </main>
       </div>

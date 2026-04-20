@@ -13,6 +13,7 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
     label: "Dashboards",
     items: [
       { icon: "dashboard", text: "Campaign Ops", path: "/" },
+      { icon: "chart", text: "Analytics", path: "/analytics" },
     ],
   },
   {
