@@ -1,8 +1,11 @@
 import type { TaskMilestone } from "../types";
-import { apiFetch } from "./client";
+import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 
 export function fetchMilestones(taskId: string): Promise<TaskMilestone[]> {
-  return apiFetch<TaskMilestone[]>(`/tasks/${taskId}/milestones`);
+  return apiFetch<ListResponseWire<TaskMilestone>>(`/tasks/${taskId}/milestones`).then(
+    normalizeListResponse
+  );
 }
 
 export function createMilestone(

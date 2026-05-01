@@ -1,4 +1,5 @@
 import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 import type { AffiliationRef, AffiliationTypeRef, SignalTypeRef } from "../types";
 import {
   isDemoModeEnabled,
@@ -20,19 +21,25 @@ export function listAffiliationTypes(): Promise<AffiliationTypeRef[]> {
   if (isDemoModeEnabled()) {
     return Promise.resolve(listDemoAffiliationTypes());
   }
-  return apiFetch<AffiliationTypeRef[]>("/affiliation-types");
+  return apiFetch<ListResponseWire<AffiliationTypeRef>>("/affiliation-types").then(
+    normalizeListResponse
+  );
 }
 
 export function listAffiliations(params: { affiliation_type_id?: string } = {}): Promise<AffiliationRef[]> {
   if (isDemoModeEnabled()) {
     return Promise.resolve(listDemoAffiliations(params.affiliation_type_id));
   }
-  return apiFetch<AffiliationRef[]>(`/affiliations${buildQS(params)}`);
+  return apiFetch<ListResponseWire<AffiliationRef>>(`/affiliations${buildQS(params)}`).then(
+    normalizeListResponse
+  );
 }
 
 export function listSignalTypes(): Promise<SignalTypeRef[]> {
   if (isDemoModeEnabled()) {
     return Promise.resolve(listDemoSignalTypes());
   }
-  return apiFetch<SignalTypeRef[]>("/signal-types");
+  return apiFetch<ListResponseWire<SignalTypeRef>>("/signal-types").then(
+    normalizeListResponse
+  );
 }

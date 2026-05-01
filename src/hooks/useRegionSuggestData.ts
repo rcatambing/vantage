@@ -3,6 +3,7 @@ import { isDemoModeEnabled } from "../features/accounts/demoData";
 import { DEMO_REGIONS } from "../data/demoLocationData";
 import type { DemoRegion } from "../data/demoLocationData";
 import { apiFetch } from "../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../lib/api/responseShape";
 
 export type RegionOption = DemoRegion;
 
@@ -18,9 +19,9 @@ export function useRegionSuggestData() {
       return;
     }
     let cancelled = false;
-    apiFetch<{ data: RegionOption[] }>("/locations/regions")
+    apiFetch<ListResponseWire<RegionOption>>("/locations/regions")
       .then((res) => {
-        if (!cancelled) setItems(res.data ?? []);
+        if (!cancelled) setItems(normalizeListResponse(res));
       })
       .catch((err: unknown) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load regions");

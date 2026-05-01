@@ -1,4 +1,5 @@
 import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 import type {
   AccountAffiliation,
   AccountAffiliationCreatePayload,
@@ -28,9 +29,9 @@ export function listAccountAffiliations(
   if (isDemoModeEnabled()) {
     return Promise.resolve(listDemoAccountAffiliations(accountId, params));
   }
-  return apiFetch<AccountAffiliation[]>(
+  return apiFetch<ListResponseWire<AccountAffiliation>>(
     `/accounts/${accountId}/affiliations${buildQS(params)}`
-  );
+  ).then(normalizeListResponse);
 }
 
 export function createAccountAffiliation(

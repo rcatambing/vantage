@@ -3,6 +3,7 @@ import { isDemoModeEnabled } from "../features/accounts/demoData";
 import { DEMO_STAFF } from "../data/demoLocationData";
 import type { DemoStaffMember } from "../data/demoLocationData";
 import { apiFetch } from "../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../lib/api/responseShape";
 
 export type StaffOption = DemoStaffMember;
 
@@ -18,9 +19,9 @@ export function useUserSuggestData() {
       return;
     }
     let cancelled = false;
-    apiFetch<{ data: StaffOption[] }>("/users/staff?page_size=500")
+    apiFetch<ListResponseWire<StaffOption>>("/users/staff?page_size=500")
       .then((res) => {
-        if (!cancelled) setItems(res.data ?? []);
+        if (!cancelled) setItems(normalizeListResponse(res));
       })
       .catch((err: unknown) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load staff");

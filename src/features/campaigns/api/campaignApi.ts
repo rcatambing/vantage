@@ -1,4 +1,5 @@
 import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 import type {
   Campaign,
   CampaignCreatePayload,
@@ -22,12 +23,21 @@ type ActionResponse = { message: string; id: number };
 
 export async function listCampaigns(): Promise<Campaign[]> {
   try {
-    const data = await apiFetch<Campaign[] | Campaign>("/campaigns");
-    return Array.isArray(data) ? data : [data];
+    const data = await apiFetch<ListResponseWire<Campaign> | Campaign>("/campaigns");
+    if (Array.isArray(data)) {
+      return data;
+    }
+    if (data && typeof data === "object" && !Array.isArray(data) && ("items" in data || "data" in data)) {
+      return normalizeListResponse(data as ListResponseWire<Campaign>);
+    }
+    if (data && typeof data === "object") {
+      return [data as Campaign];
+    }
+    return [];
   } catch (err) {
     // The backend returns HTTP 404 when the campaign list is empty.
     // Treat this as an empty result rather than a true error (backend quirk).
-    if (err instanceof Error && /404|not found/i.test(err.message)) return [];
+    if (err instanceof Error && err.message === "API error 404") return [];
     throw err;
   }
 }
@@ -68,7 +78,9 @@ export function deleteCampaign(id: number): Promise<StatusUpdateResponse> {
 }
 
 export function getObjectives(campaignId: number): Promise<Objective[]> {
-  return apiFetch<Objective[]>(`/campaigns/${campaignId}/objectives`);
+  return apiFetch<ListResponseWire<Objective>>(`/campaigns/${campaignId}/objectives`).then(
+    normalizeListResponse
+  );
 }
 
 export function getDiagnostics(campaignId: number): Promise<DiagnosticsResponse> {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "../lib/api/client";
 import { isDemoModeEnabled } from "../features/accounts/demoData";
 import { getDemoOfficeSuggestItems } from "../features/offices/demoData";
+import { normalizeListResponse, type ListResponseWire } from "../lib/api/responseShape";
 
 export interface OfficeOption {
   id: string;
@@ -25,9 +26,9 @@ export function useOfficeSuggestData() {
       return;
     }
 
-    apiFetch<{ items: OfficeOption[] }>("/offices?limit=500")
+    apiFetch<ListResponseWire<OfficeOption>>("/offices?limit=500")
       .then((res) => {
-        if (!cancelled) setItems(res.items ?? []);
+        if (!cancelled) setItems(normalizeListResponse(res));
       })
       .catch((err: unknown) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load offices");

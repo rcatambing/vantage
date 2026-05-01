@@ -1,8 +1,11 @@
 import type { TaskComment } from "../types";
-import { apiFetch } from "./client";
+import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 
 export function fetchComments(taskId: string): Promise<TaskComment[]> {
-  return apiFetch<TaskComment[]>(`/tasks/${taskId}/comments`);
+  return apiFetch<ListResponseWire<TaskComment>>(`/tasks/${taskId}/comments`).then(
+    normalizeListResponse
+  );
 }
 
 export function createComment(

@@ -44,9 +44,43 @@ function buildQS<T extends object>(p: T): string {
   return s ? `?${s}` : "";
 }
 
+type PaginatedOfficesWire = Partial<PaginatedOffices> & {
+  data?: Office[];
+};
+
+function normalizePaginatedOfficesResponse(
+  res: PaginatedOfficesWire | null
+): PaginatedOffices {
+  if (!res || typeof res !== "object" || Array.isArray(res)) {
+    return {
+      items: [],
+      total: 0,
+      skip: 0,
+      limit: 0,
+    };
+  }
+
+  const parsedTotal = Number(res.total);
+  const parsedSkip = Number(res.skip);
+  const parsedLimit = Number(res.limit);
+
+  return {
+    items: Array.isArray(res.items)
+      ? res.items
+      : Array.isArray(res.data)
+      ? res.data
+      : [],
+    total: Number.isFinite(parsedTotal) ? parsedTotal : 0,
+    skip: Number.isFinite(parsedSkip) ? parsedSkip : 0,
+    limit: Number.isFinite(parsedLimit) ? parsedLimit : 0,
+  };
+}
+
 export function listOffices(params: OfficesQueryParams = {}): Promise<PaginatedOffices> {
   if (isDemoModeEnabled()) return Promise.resolve(listDemoOffices(params));
-  return apiFetch<PaginatedOffices>(`/offices${buildQS(params)}`);
+  return apiFetch<PaginatedOfficesWire>(`/offices${buildQS(params)}`).then(
+    normalizePaginatedOfficesResponse
+  );
 }
 
 export function getOffice(id: string): Promise<Office> {

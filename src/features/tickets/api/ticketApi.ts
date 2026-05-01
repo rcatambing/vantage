@@ -43,6 +43,38 @@ function buildQS(
   return s ? `?${s}` : "";
 }
 
+type PaginatedTicketsWire = Partial<PaginatedTickets> & {
+  data?: TicketSummary[];
+};
+
+function normalizePaginatedTicketsResponse(
+  res: PaginatedTicketsWire | null,
+): PaginatedTickets {
+  if (!res || typeof res !== "object" || Array.isArray(res)) {
+    return {
+      items: [],
+      total: 0,
+      page: 1,
+      page_size: 0,
+    };
+  }
+
+  const parsedTotal = Number(res.total);
+  const parsedPage = Number(res.page);
+  const parsedPageSize = Number(res.page_size);
+
+  return {
+    items: Array.isArray(res.items)
+      ? res.items
+      : Array.isArray(res.data)
+      ? res.data
+      : [],
+    total: Number.isFinite(parsedTotal) ? parsedTotal : 0,
+    page: Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1,
+    page_size: Number.isFinite(parsedPageSize) ? parsedPageSize : 0,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Ticket CRUD
 // ---------------------------------------------------------------------------
@@ -53,9 +85,11 @@ export function listTickets(
   if (isDemoModeEnabled()) {
     return Promise.resolve(listDemoTickets(params));
   }
-  return apiFetch<PaginatedTickets>(
+  return apiFetch<PaginatedTicketsWire>(
     `/tickets${buildQS(params as Record<string, string | number | boolean | undefined>)}`,
-  ).catch(() => listDemoTickets(params));
+  )
+    .then(normalizePaginatedTicketsResponse)
+    .catch(() => listDemoTickets(params));
 }
 
 export function getTicket(id: string): Promise<Ticket> {

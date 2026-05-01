@@ -28,6 +28,38 @@ function buildQS<T extends object>(p: T): string {
   return s ? `?${s}` : "";
 }
 
+type PaginatedLeadersWire = Partial<PaginatedLeaders> & {
+  data?: CommunityLeader[];
+};
+
+function normalizePaginatedLeadersResponse(
+  res: PaginatedLeadersWire | null
+): PaginatedLeaders {
+  if (!res || typeof res !== "object" || Array.isArray(res)) {
+    return {
+      items: [],
+      total: 0,
+      page: 1,
+      page_size: 0,
+    };
+  }
+
+  const parsedTotal = Number(res.total);
+  const parsedPage = Number(res.page);
+  const parsedPageSize = Number(res.page_size);
+
+  return {
+    items: Array.isArray(res.items)
+      ? res.items
+      : Array.isArray(res.data)
+      ? res.data
+      : [],
+    total: Number.isFinite(parsedTotal) ? parsedTotal : 0,
+    page: Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1,
+    page_size: Number.isFinite(parsedPageSize) ? parsedPageSize : 0,
+  };
+}
+
 export function listLeaders(
   params: LeadersQueryParams = {}
 ): Promise<PaginatedLeaders> {
@@ -35,7 +67,9 @@ export function listLeaders(
     return Promise.resolve(listDemoLeaders(params));
   }
 
-  return apiFetch<PaginatedLeaders>(`/leaders${buildQS(params)}`).catch(() => listDemoLeaders(params));
+  return apiFetch<PaginatedLeadersWire>(`/leaders${buildQS(params)}`)
+    .then(normalizePaginatedLeadersResponse)
+    .catch(() => listDemoLeaders(params));
 }
 
 export function getLeader(id: string): Promise<CommunityLeader> {

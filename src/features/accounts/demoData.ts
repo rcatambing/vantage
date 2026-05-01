@@ -27,15 +27,15 @@ import type {
 const nowIso = () => new Date().toISOString();
 
 export const DEMO_CAMPAIGNS: Array<{ id: string; campaign_type: CampaignType; name: string }> = [
-  { id: "101", campaign_type: "ELECTION", name: "Metro Election 2026" },
-  { id: "202", campaign_type: "OPERATIONS", name: "Consumer Growth Sprint" },
-  { id: "203", campaign_type: "SPECIAL_PROJECT", name: "Public Service Pilot" },
+  { id: "1", campaign_type: "ELECTION", name: "Metro Election 2026" },
+  { id: "2", campaign_type: "OPERATIONS", name: "Consumer Growth Sprint" },
+  { id: "3", campaign_type: "SPECIAL_PROJECT", name: "Public Service Pilot" },
 ];
 
 let leaders: CommunityLeader[] = [
   {
     id: "L-001",
-    campaign_id: "101",
+    campaign_id: "1",
     full_name: "Maria Santos",
     organization: "Barangay Women Federation",
     affiliation: "Civic",
@@ -52,7 +52,7 @@ let leaders: CommunityLeader[] = [
   },
   {
     id: "L-002",
-    campaign_id: "101",
+    campaign_id: "1",
     full_name: "Rogelio Cruz",
     organization: "Transport Coalition",
     affiliation: "Sectoral",
@@ -69,7 +69,7 @@ let leaders: CommunityLeader[] = [
   },
   {
     id: "L-003",
-    campaign_id: "101",
+    campaign_id: "1",
     full_name: "Elena Ramirez",
     organization: "Parent Leaders Council",
     affiliation: "Education",
@@ -119,7 +119,7 @@ let engagements: LeaderEngagementEvent[] = [
 let accounts: CustomerAccount[] = [
   {
     id: "A-001",
-    campaign_id: "202",
+    campaign_id: "2",
     account_name: "Northstar Retail Group",
     segment: "MID_MARKET",
     district_id: "D-11",
@@ -134,7 +134,7 @@ let accounts: CustomerAccount[] = [
   },
   {
     id: "A-002",
-    campaign_id: "202",
+    campaign_id: "2",
     account_name: "Summit Health Network",
     segment: "ENTERPRISE",
     district_id: "D-12",
@@ -149,7 +149,7 @@ let accounts: CustomerAccount[] = [
   },
   {
     id: "A-003",
-    campaign_id: "203",
+    campaign_id: "3",
     account_name: "City Aid Foundation",
     segment: "NGO",
     district_id: "D-21",

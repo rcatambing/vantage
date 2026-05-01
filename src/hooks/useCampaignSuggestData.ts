@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { isDemoModeEnabled, DEMO_CAMPAIGNS } from "../features/accounts/demoData";
 import { apiFetch } from "../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../lib/api/responseShape";
 
 export interface CampaignOption {
   id: string;
@@ -20,9 +21,9 @@ export function useCampaignSuggestData() {
       return;
     }
     let cancelled = false;
-    apiFetch<{ data: CampaignOption[] }>("/campaigns?page_size=200")
+    apiFetch<ListResponseWire<CampaignOption>>("/campaigns?page_size=200")
       .then((res) => {
-        if (!cancelled) setItems(res.data ?? []);
+        if (!cancelled) setItems(normalizeListResponse(res));
       })
       .catch((err: unknown) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load campaigns");

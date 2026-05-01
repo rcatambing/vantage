@@ -3,6 +3,7 @@ import { isDemoModeEnabled } from "../features/accounts/demoData";
 import { DEMO_CITIES } from "../data/demoLocationData";
 import type { DemoCity } from "../data/demoLocationData";
 import { apiFetch } from "../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../lib/api/responseShape";
 
 export type CityOption = DemoCity;
 
@@ -28,9 +29,9 @@ export function useCitySuggestData(regionId: string | null) {
     setItems([]);
     setLoading(true);
     setError(null);
-    apiFetch<{ data: DemoCity[] }>(`/locations/regions/${encodeURIComponent(regionId)}/cities`)
+    apiFetch<ListResponseWire<DemoCity>>(`/locations/regions/${encodeURIComponent(regionId)}/cities`)
       .then((res) => {
-        if (!cancelled) setItems(res.data ?? []);
+        if (!cancelled) setItems(normalizeListResponse(res));
       })
       .catch((err: unknown) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load cities");

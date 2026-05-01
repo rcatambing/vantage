@@ -8,10 +8,12 @@ interface Props {
   name: string;
   size: PanelSize;
   children: ReactNode;
+  /** Extra action buttons rendered in the panel header, before the ⋮ menu. */
+  actions?: ReactNode;
   onRemove?: () => void;
 }
 
-export default function Panel({ id, name, size, children, onRemove }: Props) {
+export default function Panel({ id, name, size, children, actions, onRemove }: Props) {
   const height = PANEL_SIZE_HEIGHT[size];
 
   const actionMenu = (
@@ -33,6 +35,11 @@ export default function Panel({ id, name, size, children, onRemove }: Props) {
         <Tag minimal style={{ fontSize: 11 }}>
           {id}
         </Tag>
+        {actions && (
+          <div style={{ marginLeft: "auto", display: "flex", gap: 4, alignItems: "center" }}>
+            {actions}
+          </div>
+        )}
         <Popover content={actionMenu} placement="bottom-end">
           <Button icon="more" minimal small />
         </Popover>

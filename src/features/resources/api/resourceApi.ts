@@ -33,9 +33,43 @@ function buildQS<T extends object>(p: T): string {
   return s ? `?${s}` : "";
 }
 
+type PaginatedResourcesWire = Partial<PaginatedResources> & {
+  data?: Resource[];
+};
+
+function normalizePaginatedResourcesResponse(
+  res: PaginatedResourcesWire | null
+): PaginatedResources {
+  if (!res || typeof res !== "object" || Array.isArray(res)) {
+    return {
+      items: [],
+      total: 0,
+      skip: 0,
+      limit: 0,
+    };
+  }
+
+  const parsedTotal = Number(res.total);
+  const parsedSkip = Number(res.skip);
+  const parsedLimit = Number(res.limit);
+
+  return {
+    items: Array.isArray(res.items)
+      ? res.items
+      : Array.isArray(res.data)
+      ? res.data
+      : [],
+    total: Number.isFinite(parsedTotal) ? parsedTotal : 0,
+    skip: Number.isFinite(parsedSkip) ? parsedSkip : 0,
+    limit: Number.isFinite(parsedLimit) ? parsedLimit : 0,
+  };
+}
+
 export function listResources(params: ResourcesQueryParams = {}): Promise<PaginatedResources> {
   if (isDemoModeEnabled()) return Promise.resolve(listDemoResources(params));
-  return apiFetch<PaginatedResources>(`/resources${buildQS(params)}`);
+  return apiFetch<PaginatedResourcesWire>(`/resources${buildQS(params)}`).then(
+    normalizePaginatedResourcesResponse
+  ).catch(() => listDemoResources(params));
 }
 
 export function getResource(id: string): Promise<Resource> {

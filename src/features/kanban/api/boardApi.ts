@@ -1,9 +1,12 @@
 import type { Board, BoardSummary } from "../types";
-import { apiFetch } from "./client";
+import { apiFetch } from "../../../lib/api/client";
+import { normalizeListResponse, type ListResponseWire } from "../../../lib/api/responseShape";
 
 export function fetchBoards(campaignId?: number): Promise<BoardSummary[]> {
   const params = campaignId ? `?campaign_id=${campaignId}` : "";
-  return apiFetch<BoardSummary[]>(`/boards${params}`);
+  return apiFetch<ListResponseWire<BoardSummary>>(`/boards${params}`).then(
+    normalizeListResponse
+  );
 }
 
 export function fetchBoard(boardId: number): Promise<Board> {

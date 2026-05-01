@@ -24,6 +24,38 @@ function buildQS<T extends object>(p: T): string {
   return s ? `?${s}` : "";
 }
 
+type PaginatedAccountsWire = Partial<PaginatedAccounts> & {
+  data?: CustomerAccount[];
+};
+
+function normalizePaginatedAccountsResponse(
+  res: PaginatedAccountsWire | null
+): PaginatedAccounts {
+  if (!res || typeof res !== "object" || Array.isArray(res)) {
+    return {
+      items: [],
+      total: 0,
+      page: 1,
+      page_size: 0,
+    };
+  }
+
+  const parsedTotal = Number(res.total);
+  const parsedPage = Number(res.page);
+  const parsedPageSize = Number(res.page_size);
+
+  return {
+    items: Array.isArray(res.items)
+      ? res.items
+      : Array.isArray(res.data)
+      ? res.data
+      : [],
+    total: Number.isFinite(parsedTotal) ? parsedTotal : 0,
+    page: Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1,
+    page_size: Number.isFinite(parsedPageSize) ? parsedPageSize : 0,
+  };
+}
+
 export function listAccounts(
   params: AccountsQueryParams = {}
 ): Promise<PaginatedAccounts> {
@@ -31,7 +63,9 @@ export function listAccounts(
     return Promise.resolve(listDemoAccounts(params));
   }
 
-  return apiFetch<PaginatedAccounts>(`/accounts${buildQS(params)}`).catch(() => listDemoAccounts(params));
+  return apiFetch<PaginatedAccountsWire>(`/accounts${buildQS(params)}`)
+    .then(normalizePaginatedAccountsResponse)
+    .catch(() => listDemoAccounts(params));
 }
 
 export function getAccount(id: string): Promise<CustomerAccount> {

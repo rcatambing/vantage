@@ -55,8 +55,8 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Accounts Demo",
     items: [
-      { icon: "people", text: "Community Leaders (Demo)", path: "/campaigns/101/leaders" },
-      { icon: "office", text: "Customer Accounts (Demo)", path: "/campaigns/202/accounts" },
+      { icon: "people", text: "Community Leaders (Demo)", path: "/campaigns/1/leaders" },
+      { icon: "office", text: "Customer Accounts (Demo)", path: "/campaigns/2/accounts" },
     ],
   },
   {
