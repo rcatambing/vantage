@@ -1,5 +1,7 @@
 import { Tag } from "@blueprintjs/core";
 import { useKanban } from "../context/KanbanContext";
+import BoardFilterBar from "./BoardFilterBar";
+import type { BoardFilters } from "../types";
 
 const MAX_AVATARS = 5;
 
@@ -12,7 +14,12 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-export default function KanbanHeader() {
+interface KanbanHeaderProps {
+  filters: BoardFilters;
+  onFiltersChange: (filters: BoardFilters) => void;
+}
+
+export default function KanbanHeader({ filters, onFiltersChange }: KanbanHeaderProps) {
   const { board } = useKanban();
 
   if (!board) return null;
@@ -43,6 +50,9 @@ export default function KanbanHeader() {
             +{overflow}
           </span>
         )}
+      </div>
+      <div style={{ marginTop: 12 }}>
+        <BoardFilterBar boardId={board.id} filters={filters} onChange={onFiltersChange} />
       </div>
     </div>
   );

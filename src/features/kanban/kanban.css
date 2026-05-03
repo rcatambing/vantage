@@ -176,6 +176,10 @@
   background-color: #525252;
 }
 
+.kanban-card--sla-breached {
+  border-left: 3px solid #da1e28;
+}
+
 .kanban-card-top {
   display: flex;
   align-items: flex-start;

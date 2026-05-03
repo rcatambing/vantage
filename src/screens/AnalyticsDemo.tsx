@@ -67,6 +67,23 @@ import N08Panel from "../features/analytics/n08/components/N08Panel";
 import N09Panel from "../features/analytics/n09/components/N09Panel";
 import N10Panel from "../features/analytics/n10/components/N10Panel";
 import N11Panel from "../features/analytics/n11/components/N11Panel";
+import N12Panel from "../features/analytics/n12/components/N12Panel";
+import N13Panel from "../features/analytics/n13/components/N13Panel";
+import N14Panel from "../features/analytics/n14/components/N14Panel";
+import N15Panel from "../features/analytics/n15/components/N15Panel";
+import N16Panel from "../features/analytics/n16/components/N16Panel";
+import N17Panel from "../features/analytics/n17/components/N17Panel";
+import N18Panel from "../features/analytics/n18/components/N18Panel";
+import N19Panel from "../features/analytics/n19/components/N19Panel";
+import N20Panel from "../features/analytics/n20/components/N20Panel";
+import N21Panel from "../features/analytics/n21/components/N21Panel";
+import N22Panel from "../features/analytics/n22/components/N22Panel";
+import N24Panel from "../features/analytics/n24/components/N24Panel";
+import N25Panel from "../features/analytics/n25/components/N25Panel";
+import N26Panel from "../features/analytics/n26/components/N26Panel";
+import N27Panel from "../features/analytics/n27/components/N27Panel";
+import N28Panel from "../features/analytics/n28/components/N28Panel";
+import N29Panel from "../features/analytics/n29/components/N29Panel";
 
 const DEFAULT_CAMPAIGN_ID = "1";
 
@@ -392,6 +409,74 @@ export default function AnalyticsDemo() {
 
       <section aria-label="N11 - Leader Cadence Compliance">
         <N11Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N12 - Leader Commitment Yield">
+        <N12Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N13 - Leader Issue Escalation Pressure">
+        <N13Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N14 - Influence-Weighted Leader Coverage Gap">
+        <N14Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N15 - Persuasion Funnel Stage Distribution">
+        <N15Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N16 - Persuasion Velocity">
+        <N16Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N17 - Undecided Resolution Rate">
+        <N17Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N18 - Soft Opponent Flip Rate">
+        <N18Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N19 - Clan/Household Mobilization Potential">
+        <N19Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N20 - Religious Bloc Opportunity Score">
+        <N20Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N21 - Barangay Workforce Saturation">
+        <N21Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N22 - Primary Assignment Utilization">
+        <N22Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N24 - Task Cancellation Shock Index">
+        <N24Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N25 - SLA Breach Lead Time">
+        <N25Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N26 - Activity Reschedule Volatility">
+        <N26Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N27 - District Intelligence Completeness">
+        <N27Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N28 - Signal Parameter Completeness">
+        <N28Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N29 - Derived Signal Override Rate">
+        <N29Panel campaignId={campaignId} />
       </section>
     </div>
   );

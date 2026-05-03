@@ -24,6 +24,8 @@ import OfficesPage from "./features/offices/components/OfficesPage";
 import OfficeDetailPage from "./features/offices/components/OfficeDetailPage";
 import ResourcesPage from "./features/resources/components/ResourcesPage";
 import ResourceDetailPage from "./features/resources/components/ResourceDetailPage";
+import CampaignTasksPage from "./features/tasks/components/CampaignTasksPage";
+import TaskDetailPage from "./features/tasks/components/TaskDetailPage";
 import AnalyticsDemo from "./screens/AnalyticsDemo";
 
 function AuthGate() {
@@ -59,6 +61,8 @@ function Shell() {
             <Route path="/tickets" element={<TicketsPage />} />
             <Route path="/tickets/:id" element={<TicketDetailPage />} />
             <Route path="/campaigns/:campaignId/tickets" element={<TicketsPage />} />
+            <Route path="/campaigns/:campaignId/tasks" element={<CampaignTasksPage />} />
+            <Route path="/tasks/:id" element={<TaskDetailPage />} />
             <Route path="/offices" element={<OfficesPage />} />
             <Route path="/offices/:id" element={<OfficeDetailPage />} />
             <Route path="/resources" element={<ResourcesPage />} />

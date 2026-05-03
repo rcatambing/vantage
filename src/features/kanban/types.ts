@@ -55,6 +55,21 @@ export interface KanbanTask {
   milestone_completed: number;
   progress_percent: number;
   created_at: string;
+  ticket_type?: "TASK" | "INCIDENT" | "REQUEST" | null;
+  severity?: "LOW" | "MODERATE" | "HIGH" | "CRITICAL" | null;
+  sla_breached?: boolean;
+  sla_due_at?: string | null;
+  objective_ids?: string[];
+  campaign_task_id?: string | null;
+  ticket_id?: string | null;
+}
+
+export interface BoardFilters {
+  assignee_id?: string;
+  severity?: "LOW" | "MODERATE" | "HIGH" | "CRITICAL";
+  ticket_type?: "TASK" | "INCIDENT" | "REQUEST";
+  sla_breached?: boolean;
+  due_before?: string;
 }
 
 export interface BoardColumn {

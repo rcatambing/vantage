@@ -1,11 +1,12 @@
 import { Menu, MenuItem, MenuDivider, Icon } from "@blueprintjs/core";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, useParams } from "react-router";
 import { useApp } from "../context/useApp";
 
 interface NavItem {
   icon: string;
   text: string;
   path: string;
+  campaignScoped?: boolean;
 }
 
 const SECTIONS: { label: string; items: NavItem[] }[] = [
@@ -25,6 +26,8 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
     label: "Campaigns",
     items: [
       { icon: "flag", text: "Campaigns", path: "/campaigns" },
+      { icon: "clipboard", text: "Tasks", path: "/campaigns/:campaignId/tasks", campaignScoped: true },
+      { icon: "chart", text: "Intelligence", path: "/campaigns/:campaignId/intelligence", campaignScoped: true },
     ],
   },
   {
@@ -36,7 +39,7 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Boards",
     items: [
-      { icon: "clipboard", text: "Kanban Board", path: "/boards" },
+      { icon: "panel-table", text: "Kanban Board", path: "/boards" },
     ],
   },
   {
@@ -73,10 +76,33 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
   },
 ];
 
+function useActiveCampaignId(): string | null {
+  const params = useParams<{ campaignId?: string; id?: string }>();
+  return params.campaignId ?? params.id ?? null;
+}
+
+function resolvePath(item: NavItem, campaignId: string | null): string {
+  if (item.campaignScoped && campaignId) {
+    return item.path.replace(":campaignId", campaignId);
+  }
+  return item.path;
+}
+
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarCollapsed } = useApp();
+  const activeCampaignId = useActiveCampaignId();
+
+  const isActive = (item: NavItem) => {
+    const resolved = resolvePath(item, activeCampaignId);
+    return location.pathname === resolved;
+  };
+
+  const handleClick = (item: NavItem) => {
+    const resolved = resolvePath(item, activeCampaignId);
+    navigate(resolved);
+  };
 
   return (
     <aside className={`vantage-sidebar${sidebarCollapsed ? " collapsed" : ""}`}>
@@ -85,36 +111,43 @@ export default function Sidebar() {
           {SECTIONS.map((section) => (
             <div key={section.label}>
               <div className="sidebar-section-label">{section.label}</div>
-              {section.items.map((item) => (
-                <MenuItem
-                  key={item.path}
-                  icon={item.icon as never}
-                  text={item.text}
-                  active={location.pathname === item.path}
-                  onClick={() => navigate(item.path)}
-                />
-              ))}
+              {section.items.map((item) => {
+                // Hide campaign-scoped items when no campaign is selected
+                if (item.campaignScoped && !activeCampaignId) return null;
+                return (
+                  <MenuItem
+                    key={item.path}
+                    icon={item.icon as never}
+                    text={item.text}
+                    active={isActive(item)}
+                    onClick={() => handleClick(item)}
+                  />
+                );
+              })}
               <MenuDivider />
             </div>
           ))}
         </Menu>
       ) : (
         <div style={{ paddingTop: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          {SECTIONS.flatMap((s) => s.items).map((item) => (
-            <Icon
-              key={item.path}
-              icon={item.icon as never}
-              size={16}
-              style={{
-                padding: 8,
-                cursor: "pointer",
-                borderRadius: 0,
-                background: location.pathname === item.path ? "var(--cds-active-ui)" : undefined,
-                color: location.pathname === item.path ? "var(--cds-interactive)" : undefined,
-              }}
-              onClick={() => navigate(item.path)}
-            />
-          ))}
+          {SECTIONS.flatMap((s) => s.items).map((item) => {
+            if (item.campaignScoped && !activeCampaignId) return null;
+            return (
+              <Icon
+                key={item.path}
+                icon={item.icon as never}
+                size={16}
+                style={{
+                  padding: 8,
+                  cursor: "pointer",
+                  borderRadius: 0,
+                  background: isActive(item) ? "var(--cds-active-ui)" : undefined,
+                  color: isActive(item) ? "var(--cds-interactive)" : undefined,
+                }}
+                onClick={() => handleClick(item)}
+              />
+            );
+          })}
         </div>
       )}
     </aside>

@@ -1,0 +1,40 @@
+import { useState } from "react";
+import { snapshotStagesJob } from "../api/intelligenceJobsApi";
+
+export interface UseSnapshotStagesJobResult {
+  submitting: boolean;
+  error: string | null;
+  result: { message: string; rows_written: number; snapshot_date: string } | null;
+  run: (payload: { campaign_id?: string | null; snapshot_date?: string }) => Promise<boolean>;
+  clear: () => void;
+}
+
+export function useSnapshotStagesJob(): UseSnapshotStagesJobResult {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<{ message: string; rows_written: number; snapshot_date: string } | null>(null);
+
+  function clear() {
+    setError(null);
+    setResult(null);
+  }
+
+  async function run(payload: { campaign_id?: string | null; snapshot_date?: string }): Promise<boolean> {
+    if (submitting) return false;
+    setSubmitting(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await snapshotStagesJob(payload);
+      setResult(res);
+      return true;
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Job failed.");
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return { submitting, error, result, run, clear };
+}

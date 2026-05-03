@@ -2,8 +2,9 @@ import { useState, useCallback } from "react";
 import { KanbanProvider, useKanban } from "../context/KanbanContext";
 import { createDemoBoard } from "../data/demoBoard";
 import KanbanHeader from "./KanbanHeader";
-import KanbanBoard from "./KanbanBoard";
+import FilteredKanbanBoard from "./FilteredKanbanBoard";
 import KanbanCardDetail from "./KanbanCardDetail";
+import type { BoardFilters } from "../types";
 import "../kanban.css";
 
 /** Inner component that can access KanbanContext */
@@ -11,6 +12,7 @@ function KanbanPageInner() {
   const { board } = useKanban();
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [pendingColumnId, setPendingColumnId] = useState<number | null>(null);
+  const [filters, setFilters] = useState<BoardFilters>({});
 
   const handleCardClick = useCallback((taskId: string) => {
     setSelectedTaskId(taskId);
@@ -35,8 +37,12 @@ function KanbanPageInner() {
 
   return (
     <div className="kanban-page">
-      <KanbanHeader />
-      <KanbanBoard onCardClick={handleCardClick} onRequestCreate={handleRequestCreate} />
+      <KanbanHeader filters={filters} onFiltersChange={setFilters} />
+      <FilteredKanbanBoard
+        onCardClick={handleCardClick}
+        onRequestCreate={handleRequestCreate}
+        filters={filters}
+      />
       {/* Edit dialog */}
       <KanbanCardDetail
         task={selectedTask}

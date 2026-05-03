@@ -8,9 +8,10 @@ import EmptyState from "./EmptyState";
 interface KanbanBoardProps {
   onCardClick: (taskId: string) => void;
   onRequestCreate: (columnId: number) => void;
+  filterFn?: (task: KanbanTask) => boolean;
 }
 
-export default function KanbanBoard({ onCardClick, onRequestCreate }: KanbanBoardProps) {
+export default function KanbanBoard({ onCardClick, onRequestCreate, filterFn }: KanbanBoardProps) {
   const { board, moveTask, addColumn } = useKanban();
 
   const handleDragEnd = (result: DropResult) => {
@@ -59,10 +60,20 @@ export default function KanbanBoard({ onCardClick, onRequestCreate }: KanbanBoar
     );
   }
 
+  // Apply client-side filtering
+  const filteredColumns = filterFn
+    ? board.columns.map((col) => ({
+        ...col,
+        tasks: col.tasks.filter(filterFn),
+      }))
+    : board.columns;
+
+  const totalVisible = filteredColumns.reduce((sum, col) => sum + col.tasks.length, 0);
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="kanban-board">
-        {board.columns.map((col) => (
+        {filteredColumns.map((col) => (
           <KanbanColumn
             key={col.id}
             column={col}
@@ -70,6 +81,11 @@ export default function KanbanBoard({ onCardClick, onRequestCreate }: KanbanBoar
             onAddTask={handleAddTask}
           />
         ))}
+        {totalVisible === 0 && filterFn && (
+          <div style={{ minWidth: 272, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <EmptyState title="No cards match" description="Adjust your filters to see tasks." icon="filter" />
+          </div>
+        )}
         <button className="kanban-add-column" onClick={handleAddColumn} type="button">
           <Icon icon="plus" style={{ marginRight: 6 }} />
           Add column

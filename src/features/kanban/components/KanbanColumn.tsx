@@ -2,6 +2,7 @@ import { Button, Menu, MenuItem, Popover } from "@blueprintjs/core";
 import { Droppable } from "@hello-pangea/dnd";
 import type { BoardColumn, KanbanTask } from "../types";
 import KanbanCard from "./KanbanCard";
+import { ColumnHeaderBadge } from "./ColumnHeaderBadge";
 
 interface KanbanColumnProps {
   column: BoardColumn;
@@ -21,9 +22,9 @@ export default function KanbanColumn({ column, onCardClick, onAddTask }: KanbanC
     <div className="kanban-column">
       <div className="kanban-column-header">
         <h3 className="kanban-column-title">{column.title}</h3>
-        <span className="kanban-column-count">{column.tasks.length}</span>
+        <ColumnHeaderBadge count={column.tasks.length} />
         <Popover content={columnMenu} placement="bottom-end" minimal>
-          <Button icon="more" minimal small aria-label="Column actions" />
+          <Button icon="cog" minimal small aria-label="Column settings" />
         </Popover>
       </div>
 
