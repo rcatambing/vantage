@@ -18,7 +18,7 @@ interface FeedItemProps {
   readonly comments?: readonly IComment[];
 }
 
-const FeedItem: React.FC<FeedItemProps> = ({ item, comments = [] }) => {
+const FeedItem: React.FC<FeedItemProps> = React.memo(({ item, comments = [] }) => {
   const [showComments, setShowComments] = useState(false);
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -105,6 +105,6 @@ const FeedItem: React.FC<FeedItemProps> = ({ item, comments = [] }) => {
       />
     </Card>
   );
-};
+});
 
 export default FeedItem;

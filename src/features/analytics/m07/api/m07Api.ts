@@ -1,4 +1,5 @@
 import { apiFetch } from "../../../../lib/api/client";
+import { buildQueryString } from "../../../../lib/api/queryString";
 import type {
   M07EstimateResponse,
   M07EstimateParams,
@@ -12,22 +13,11 @@ import type {
 const BASE = "/analytics/metrics/M07";
 
 export function fetchM07Estimate(params: M07EstimateParams): Promise<M07EstimateResponse> {
-  const qs = new URLSearchParams({ campaign_id: params.campaign_id });
-  if (params.district_id) qs.set("district_id", params.district_id);
-  if (params.election_type) qs.set("election_type", params.election_type);
-  if (params.election_cycle != null) qs.set("election_cycle", String(params.election_cycle));
-  return apiFetch<M07EstimateResponse>(`${BASE}?${qs.toString()}`);
+  return apiFetch<M07EstimateResponse>(`${BASE}${buildQueryString(params)}`);
 }
 
 export function fetchM07History(params: M07HistoryParams): Promise<M07HistoryResponse> {
-  const qs = new URLSearchParams({ campaign_id: params.campaign_id });
-  if (params.district_id) qs.set("district_id", params.district_id);
-  if (params.election_type) qs.set("election_type", params.election_type);
-  if (params.year_from != null) qs.set("year_from", String(params.year_from));
-  if (params.year_to != null) qs.set("year_to", String(params.year_to));
-  qs.set("page", String(params.page ?? 1));
-  qs.set("page_size", String(params.page_size ?? 25));
-  return apiFetch<M07HistoryResponse>(`${BASE}/history?${qs.toString()}`);
+  return apiFetch<M07HistoryResponse>(`${BASE}/history${buildQueryString(params)}`);
 }
 
 /**

@@ -37,7 +37,7 @@ const getRelativeTime = (date: Date): string => {
   return `${days}d ago`;
 };
 
-const CommentItem: React.FC<CommentItemProps> = ({
+const CommentItem: React.FC<CommentItemProps> = React.memo(({
   comment,
   depth = 0,
   onReply,
@@ -145,6 +145,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default CommentItem;
