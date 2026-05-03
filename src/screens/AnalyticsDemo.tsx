@@ -61,6 +61,12 @@ import N02Panel from "../features/analytics/n02/components/N02Panel";
 import N03Panel from "../features/analytics/n03/components/N03Panel";
 import N04Panel from "../features/analytics/n04/components/N04Panel";
 import N05Panel from "../features/analytics/n05/components/N05Panel";
+import N06Panel from "../features/analytics/n06/components/N06Panel";
+import N07Panel from "../features/analytics/n07/components/N07Panel";
+import N08Panel from "../features/analytics/n08/components/N08Panel";
+import N09Panel from "../features/analytics/n09/components/N09Panel";
+import N10Panel from "../features/analytics/n10/components/N10Panel";
+import N11Panel from "../features/analytics/n11/components/N11Panel";
 
 const DEFAULT_CAMPAIGN_ID = "1";
 
@@ -362,6 +368,30 @@ export default function AnalyticsDemo() {
 
       <section aria-label="N05 - Affiliation Influence Lift">
         <N05Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N06 - Affiliation Volatility Rate">
+        <N06Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N07 - Conflicting Signal Ratio">
+        <N07Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N08 - Derived Signal Dependency">
+        <N08Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N09 - Leader Support Conversion">
+        <N09Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N10 - Key Influencer Activation">
+        <N10Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N11 - Leader Cadence Compliance">
+        <N11Panel campaignId={campaignId} />
       </section>
     </div>
   );
