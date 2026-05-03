@@ -65,6 +65,12 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
       { icon: "document", text: "Field Ops Report", path: "/report/field-ops" },
     ],
   },
+  {
+    label: "Analytics",
+    items: [
+      { icon: "chart", text: "Analytics Demo", path: "/analytics/demo" },
+    ],
+  },
 ];
 
 export default function Sidebar() {

@@ -90,7 +90,6 @@ export default function TicketFilterBar({
             })
           }
           options={TYPE_OPTIONS}
-          small
         />
         <HTMLSelect
           value={params.severity ?? ""}
@@ -102,7 +101,6 @@ export default function TicketFilterBar({
             })
           }
           options={SEVERITY_OPTIONS}
-          small
         />
         <HTMLSelect
           value={params.status ?? ""}
@@ -114,7 +112,6 @@ export default function TicketFilterBar({
             })
           }
           options={STATUS_OPTIONS}
-          small
         />
       </ControlGroup>
 

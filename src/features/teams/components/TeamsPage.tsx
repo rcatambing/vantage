@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, H2, HTMLTable, Dialog, FormGroup, InputGroup, TextArea } from '@blueprintjs/core';
+import { Button, HTMLTable, Dialog, FormGroup, InputGroup, TextArea } from '@blueprintjs/core';
 
 interface Team {
   id: string;

@@ -26,9 +26,7 @@ export default function OfficesPage() {
   const [statusFilter, setStatusFilter] = useState<OfficeStatus | "">("");
   const [createOpen, setCreateOpen] = useState(false);
 
-  const queryStatus = statusFilter || (showAll ? undefined : undefined);
-
-  const { items, total, loading, error, refetch } = useOfficeList(
+  const { items, loading, error, refetch } = useOfficeList(
     statusFilter
       ? { status: statusFilter, office_type: officeTypeFilter || undefined, search: search || undefined }
       : { office_type: officeTypeFilter || undefined, search: search || undefined }

@@ -202,7 +202,6 @@ export default function KanbanCardDetail({ task, isOpen, onClose, mode = "edit",
                   onChange={(e) => setCreateDescription(e.target.value)}
                   fill
                   rows={4}
-                  growVertically
                 />
               ) : editingDescription ? (
                 <div className="kanban-detail-description-edit">
@@ -211,7 +210,6 @@ export default function KanbanCardDetail({ task, isOpen, onClose, mode = "edit",
                     onChange={(e) => setDescriptionDraft(e.target.value)}
                     fill
                     rows={4}
-                    growVertically
                     autoFocus
                   />
                   <div className="kanban-detail-description-actions">

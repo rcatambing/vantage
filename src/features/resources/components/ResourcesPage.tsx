@@ -27,7 +27,7 @@ export default function ResourcesPage() {
   const [conditionFilter, setConditionFilter] = useState<ResourceCondition | "">("");
   const [createOpen, setCreateOpen] = useState(false);
 
-  const { items, total, loading, error, refetch } = useResourceList(
+  const { items, loading, error, refetch } = useResourceList(
     statusFilter
       ? {
           status: statusFilter,

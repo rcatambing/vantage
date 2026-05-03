@@ -4,7 +4,6 @@ import {
   Intent,
   Tag,
   Callout,
-  Spinner,
   Tabs,
   Tab,
   HTMLSelect,

@@ -26,7 +26,6 @@ const CommentInput: React.FC<CommentInputProps> = ({ onSubmit, placeholder = "Wr
     <ControlGroup fill style={{ marginTop: 8 }}>
       <TextArea
         fill
-        growVertically
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}

@@ -244,7 +244,7 @@ function Step1SelectFile({
   duplicateModeRef,
   onFileChange,
 }: {
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   duplicateModeRef: React.MutableRefObject<DuplicateMode>;
   onFileChange: (hasFile: boolean) => void;
 }) {
@@ -278,7 +278,7 @@ function Step1SelectFile({
       >
         <RadioGroup
           aria-label="Duplicate mode"
-          defaultSelectedValue="REJECT"
+          selectedValue={duplicateModeRef.current}
           onChange={(e) => {
             duplicateModeRef.current = (e.target as HTMLInputElement).value as DuplicateMode;
           }}

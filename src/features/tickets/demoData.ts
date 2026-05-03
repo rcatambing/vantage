@@ -3,8 +3,6 @@ import type {
   Ticket,
   TicketSummary,
   TicketRelationship,
-  ReassignmentEntry,
-  TicketLocationHistoryEntry,
   TicketCreatePayload,
   TicketUpdatePayload,
   PaginatedTickets,
