@@ -41,11 +41,26 @@ import M38Panel from "../features/analytics/m38/M38Panel";
 import M39Panel from "../features/analytics/m39/M39Panel";
 import M40Panel from "../features/analytics/m40/M40Panel";
 import M51Panel from "../features/analytics/m51/M51Panel";
+import M52Panel from "../features/analytics/m52/components/M52Panel";
+import M53Panel from "../features/analytics/m53/components/M53Panel";
+import M54Panel from "../features/analytics/m54/components/M54Panel";
+import M55Panel from "../features/analytics/m55/components/M55Panel";
 import M35Panel from "../features/analytics/m35/M35Panel";
 import M41Panel from "../features/analytics/m41/M41Panel";
 import M42Panel from "../features/analytics/m42/M42Panel";
 import M43Panel from "../features/analytics/m43/M43Panel";
 import M44Panel from "../features/analytics/m44/M44Panel";
+import M45Panel from "../features/analytics/m45/M45Panel";
+import M46Panel from "../features/analytics/m46/M46Panel";
+import M47Panel from "../features/analytics/m47/M47Panel";
+import M48Panel from "../features/analytics/m48/M48Panel";
+import M49Panel from "../features/analytics/m49/M49Panel";
+import M50Panel from "../features/analytics/m50/M50Panel";
+import N01Panel from "../features/analytics/n01/components/N01Panel";
+import N02Panel from "../features/analytics/n02/components/N02Panel";
+import N03Panel from "../features/analytics/n03/components/N03Panel";
+import N04Panel from "../features/analytics/n04/components/N04Panel";
+import N05Panel from "../features/analytics/n05/components/N05Panel";
 
 const DEFAULT_CAMPAIGN_ID = "1";
 
@@ -269,6 +284,22 @@ export default function AnalyticsDemo() {
         <M51Panel campaignId={campaignId} />
       </section>
 
+      <section aria-label="M52 - Device Deployment Rate">
+        <M52Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M53 - Open Incident Rate">
+        <M53Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M54 - Ticket SLA Compliance">
+        <M54Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M55 - Escalation Rate">
+        <M55Panel campaignId={campaignId} />
+      </section>
+
       <section aria-label="M35 - District Voter Penetration">
         <M35Panel campaignId={campaignId} />
       </section>
@@ -287,6 +318,50 @@ export default function AnalyticsDemo() {
 
       <section aria-label="M44 - Rally/Event Attendance">
         <M44Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M45 - Social Media Engagement">
+        <M45Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M46 - Material Distribution Rate">
+        <M46Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M47 - Feed Activity Volume">
+        <M47Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M48 - Feed Engagement Quality">
+        <M48Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M49 - Budget Utilization Rate">
+        <M49Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="M50 - Cost per Voter Contact">
+        <M50Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N01 - Signal Freshness Index">
+        <N01Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N02 - Confidence-Weighted Support Score">
+        <N02Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N03 - Signal Expiry Risk Rate">
+        <N03Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N04 - Affiliation Signal Coverage">
+        <N04Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N05 - Affiliation Influence Lift">
+        <N05Panel campaignId={campaignId} />
       </section>
     </div>
   );
