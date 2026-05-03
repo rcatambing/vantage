@@ -101,7 +101,7 @@ export default function MilestoneChecklist({
             <Checkbox
               checked={m.is_completed}
               onChange={() => handleToggle(m)}
-              label={
+              labelElement={
                 <span
                   style={{
                     textDecoration: m.is_completed ? "line-through" : undefined,

@@ -84,6 +84,14 @@ import N26Panel from "../features/analytics/n26/components/N26Panel";
 import N27Panel from "../features/analytics/n27/components/N27Panel";
 import N28Panel from "../features/analytics/n28/components/N28Panel";
 import N29Panel from "../features/analytics/n29/components/N29Panel";
+import N31Panel from "../features/analytics/n31/components/N31Panel";
+import N32Panel from "../features/analytics/n32/components/N32Panel";
+import N33Panel from "../features/analytics/n33/components/N33Panel";
+import N34Panel from "../features/analytics/n34/components/N34Panel";
+import N35Panel from "../features/analytics/n35/components/N35Panel";
+import N36Panel from "../features/analytics/n36/components/N36Panel";
+import N37Panel from "../features/analytics/n37/components/N37Panel";
+import N39Panel from "../features/analytics/n39/components/N39Panel";
 
 const DEFAULT_CAMPAIGN_ID = "1";
 
@@ -477,6 +485,38 @@ export default function AnalyticsDemo() {
 
       <section aria-label="N29 - Derived Signal Override Rate">
         <N29Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N31 - District Winnability Composite">
+        <N31Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N32 - Election-Day Risk Heat">
+        <N32Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N33 - Support Variance by City Class">
+        <N33Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N34 - Persuadable Density by City Class">
+        <N34Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N35 - Income Bracket Conversion Rate">
+        <N35Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N36 - Income Bracket Signal Intensity Gap">
+        <N36Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N37 - Urban/Rural Support Disparity">
+        <N37Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N39 - Class-Weighted Winnability Modifier">
+        <N39Panel campaignId={campaignId} />
       </section>
     </div>
   );

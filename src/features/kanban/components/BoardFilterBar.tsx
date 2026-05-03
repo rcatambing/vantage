@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import {
   ControlGroup,
   HTMLSelect,
@@ -93,7 +93,6 @@ export default function BoardFilterBar({ boardId, filters, onChange }: Props) {
         style={{ width: 160 }}
       />
       <HTMLSelect
-        small
         value={filters.ticket_type ?? ""}
         onChange={(e) =>
           onChange({
@@ -105,7 +104,6 @@ export default function BoardFilterBar({ boardId, filters, onChange }: Props) {
         style={{ width: 140 }}
       />
       <HTMLSelect
-        small
         value={filters.severity ?? ""}
         onChange={(e) =>
           onChange({
@@ -117,7 +115,6 @@ export default function BoardFilterBar({ boardId, filters, onChange }: Props) {
         style={{ width: 150 }}
       />
       <Checkbox
-        small
         checked={filters.sla_breached ?? false}
         onChange={(e) =>
           onChange({

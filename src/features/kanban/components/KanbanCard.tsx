@@ -72,12 +72,12 @@ export default function KanbanCard({ task, index, onClick }: KanbanCardProps) {
           {isTicket && (
             <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
               {task.ticket_type && (
-                <Tag minimal small>
+                <Tag minimal>
                   {TYPE_LABEL[task.ticket_type] ?? task.ticket_type}
                 </Tag>
               )}
               {task.severity && (
-                <Tag intent={SEVERITY_INTENT[task.severity] ?? Intent.NONE} minimal small>
+                <Tag intent={SEVERITY_INTENT[task.severity] ?? Intent.NONE} minimal>
                   {task.severity}
                 </Tag>
               )}

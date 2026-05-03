@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback } from "react";
-import { NonIdealState } from "@blueprintjs/core";
 import type { KanbanTask } from "../types";
 import type { BoardFilters } from "./BoardFilterBar";
 import KanbanBoard from "./KanbanBoard";

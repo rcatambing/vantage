@@ -17,7 +17,7 @@ function scoreBg(score: number): string {
   return "rgba(214, 39, 40, 0.15)";
 }
 
-function pctCell(v: number): JSX.Element {
+function pctCell(v: number): React.ReactElement {
   const color = v >= 80 ? "#2ca02c" : v >= 50 ? "#ff7f0e" : "#d62728";
   return <span style={{ color, fontWeight: 600 }}>{v.toFixed(1)}%</span>;
 }

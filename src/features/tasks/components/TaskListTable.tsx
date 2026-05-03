@@ -68,11 +68,10 @@ function PriorityTag({ priority }: { priority: TaskPriority }) {
 }
 
 function ProgressBar({ percent }: { percent: number }) {
-  const value = Math.min(100, Math.max(0, percent)) / 100;
-  let intent = Intent.NONE;
-  if (percent >= 80) intent = Intent.SUCCESS;
-  else if (percent >= 40) intent = Intent.PRIMARY;
-  else if (percent > 0) intent = Intent.WARNING;
+  let intent: Intent = Intent.NONE;
+  if (percent >= 80) intent = Intent.SUCCESS as Intent;
+  else if (percent >= 40) intent = Intent.PRIMARY as Intent;
+  else if (percent > 0) intent = Intent.WARNING as Intent;
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

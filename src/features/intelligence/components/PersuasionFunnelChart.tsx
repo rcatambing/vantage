@@ -1,4 +1,4 @@
-import { HTMLTable, Classes, Tag, Intent } from "@blueprintjs/core";
+import { HTMLTable, Tag, Intent } from "@blueprintjs/core";
 import type { PersuasionFunnelRow, PersuasionStage } from "../types";
 
 const STAGE_INTENT: Record<PersuasionStage, Intent> = {
