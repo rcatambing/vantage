@@ -11,6 +11,29 @@ export interface Team {
   created_by: string | null;
   created_at: string;
   member_count: number;
+  campaigns?: { id: string; name: string }[];
+}
+
+export interface TeamMember {
+  id: string;
+  user_id: string;
+  full_name: string;
+  role: MemberRole;
+  joined_at: string;
+  added_by: string | null;
+}
+
+export interface StaffProfile {
+  id: string;
+  user_id: string;
+  full_name: string;
+  preferred_name: string | null;
+  staff_type: string;
+  status: string;
+  teams: { team_id: string; team_name: string; role: MemberRole }[];
+  primary_contact: string | null;
+  district_names: string[];
+  last_activity: string | null;
 }
 
 export interface TeamCreatePayload {

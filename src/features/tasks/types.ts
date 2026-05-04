@@ -39,6 +39,7 @@ export interface TaskComment {
   content: string;
   created_at: string;
   updated_at: string | null;
+  edit_history?: { edited_at: string; previous_content: string }[];
 }
 
 export interface CampaignTaskDetail extends CampaignTask {

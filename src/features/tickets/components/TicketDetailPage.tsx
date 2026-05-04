@@ -22,6 +22,7 @@ import { useTicketMutations } from "../hooks/useTicketMutations";
 import TicketStatusTag from "./TicketStatusTag";
 import TicketSeverityTag from "./TicketSeverityTag";
 import SLABadge from "./SLABadge";
+import SLATimeline from "./SLATimeline";
 import RelationshipGraph from "./RelationshipGraph";
 import ReassignmentTimeline from "./ReassignmentTimeline";
 import type { TicketLocationHistoryEntry } from "../types";
@@ -208,7 +209,20 @@ export default function TicketDetailPage() {
         <code className={Classes.TEXT_MUTED} style={{ fontSize: 14 }}>
           {ticket.ticket_number}
         </code>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: 20,
+            fontWeight: 600,
+            flex: 1,
+            minWidth: 200,
+          }}
+        >
+          {ticket.title}
+        </h1>
+        <TicketSeverityTag severity={ticket.severity} />
         <TicketStatusTag status={ticket.status} />
+        <SLABadge slaBreached={ticket.sla_breached} slaDueAt={ticket.sla_due_at} />
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           {!editing && (
             <Button small icon="edit" text="Edit" onClick={startEditing} />
@@ -307,20 +321,12 @@ export default function TicketDetailPage() {
             </>
           ) : (
             <>
-              <h2
-                style={{
-                  margin: "0 0 8px 0",
-                  fontSize: 24,
-                  fontWeight: 400,
-                }}
-              >
-                {ticket.title}
-              </h2>
               <p
                 style={{
                   color: "var(--cds-text-secondary, #c6c6c6)",
                   fontSize: 14,
                   marginBottom: 24,
+                  lineHeight: 1.6,
                 }}
               >
                 {ticket.description || "No description provided."}
@@ -355,8 +361,24 @@ export default function TicketDetailPage() {
                   </div>
                 </div>
                 <div>
+                  <span className={Classes.TEXT_MUTED}>Status</span>
+                  <div>
+                    <TicketStatusTag status={ticket.status} />
+                  </div>
+                </div>
+                <div>
                   <span className={Classes.TEXT_MUTED}>Due Date</span>
                   <div>{formatDateTime(ticket.due_date)}</div>
+                </div>
+                <div>
+                  <span className={Classes.TEXT_MUTED}>Objective</span>
+                  <div>
+                    {ticket.objective_id ? (
+                      <code>{ticket.objective_id.slice(0, 8)}…</code>
+                    ) : (
+                      <span className={Classes.TEXT_MUTED}>None</span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <span className={Classes.TEXT_MUTED}>Created</span>
@@ -366,21 +388,16 @@ export default function TicketDetailPage() {
                   <span className={Classes.TEXT_MUTED}>Resolved</span>
                   <div>{formatDateTime(ticket.resolved_at)}</div>
                 </div>
-                <div>
-                  <span className={Classes.TEXT_MUTED}>SLA</span>
-                  <div>
-                    <SLABadge
-                      slaBreached={ticket.sla_breached}
-                      slaDueAt={ticket.sla_due_at}
-                    />
-                  </div>
-                </div>
               </div>
             </>
           )}
 
           {/* Relationships */}
-          <RelationshipGraph relationships={ticket.relationships} />
+          <RelationshipGraph
+            ticketId={ticket.id}
+            relationships={ticket.relationships}
+            onMutate={refetch}
+          />
 
           {/* Location history */}
           <LocationHistoryList entries={locationHistory} />
@@ -431,7 +448,7 @@ export default function TicketDetailPage() {
             )}
           </div>
 
-          {/* SLA Timer card */}
+          {/* SLA Timeline */}
           <div
             style={{
               padding: 16,
@@ -439,18 +456,11 @@ export default function TicketDetailPage() {
               marginBottom: 16,
             }}
           >
-            <h4
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: 14,
-                fontWeight: 600,
-              }}
-            >
-              SLA
-            </h4>
-            <SLABadge
-              slaBreached={ticket.sla_breached}
+            <SLATimeline
               slaDueAt={ticket.sla_due_at}
+              slaBreached={ticket.sla_breached}
+              createdAt={ticket.created_at}
+              resolvedAt={ticket.resolved_at}
             />
           </div>
 

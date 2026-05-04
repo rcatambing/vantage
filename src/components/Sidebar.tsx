@@ -55,7 +55,22 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
     label: "Management",
     items: [
       { icon: "people", text: "Teams Directory", path: "/teams" },
+      { icon: "id-number", text: "Staff Roster", path: "/staff" },
       { icon: "notifications", text: "Notifications", path: "/notifications" },
+    ],
+  },
+  {
+    label: "Voters & Polls",
+    items: [
+      { icon: "people", text: "Voter Registry", path: "/campaigns/:campaignId/voters", campaignScoped: true },
+      { icon: "chat", text: "Polls", path: "/campaigns/:campaignId/polls", campaignScoped: true },
+    ],
+  },
+  {
+    label: "Field Intelligence",
+    items: [
+      { icon: "map", text: "Field Intel", path: "/campaigns/:campaignId/field-intel", campaignScoped: true },
+      { icon: "mobile-video", text: "Canvass", path: "/campaigns/:campaignId/field-intel/canvass", campaignScoped: true },
     ],
   },
   {

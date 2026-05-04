@@ -151,3 +151,19 @@ export function createComment(
     body: JSON.stringify(payload),
   });
 }
+
+export function updateComment(
+  commentId: string,
+  payload: CommentCreatePayload,
+): Promise<TaskComment> {
+  return apiFetch<TaskComment>(`/comments/${commentId}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteComment(commentId: string): Promise<{ message: string }> {
+  return apiFetch<{ message: string }>(`/comments/${commentId}`, {
+    method: "DELETE",
+  });
+}

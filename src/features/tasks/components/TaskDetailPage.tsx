@@ -18,6 +18,7 @@ import { useTask } from "../hooks/useTask";
 import { useTaskMutations } from "../hooks/useTaskMutations";
 import MilestoneChecklist from "./MilestoneChecklist";
 import TaskCommentThread from "./TaskCommentThread";
+import OverdueFlag from "./OverdueFlag";
 import UserSuggest from "../../../components/suggest/UserSuggest";
 
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
@@ -278,6 +279,7 @@ export default function TaskDetailPage() {
               <h2 style={{ margin: "0 0 12px", fontSize: 20, fontWeight: 600 }}>
                 {task.title}
               </h2>
+              <OverdueFlag isOverdue={task.is_overdue} dueDate={task.due_date} />
               {task.description && (
                 <p
                   style={{

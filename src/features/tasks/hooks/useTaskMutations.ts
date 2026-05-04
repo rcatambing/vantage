@@ -7,6 +7,8 @@ import {
   updateMilestone,
   deleteMilestone,
   createComment,
+  updateComment,
+  deleteComment,
 } from "../api/taskApi";
 import type {
   TaskCreatePayload,
@@ -31,6 +33,8 @@ export interface UseTaskMutationsResult {
   editMilestone: (id: string, payload: MilestoneUpdatePayload) => Promise<boolean>;
   removeMilestone: (id: string) => Promise<boolean>;
   addComment: (taskId: string, payload: CommentCreatePayload) => Promise<boolean>;
+  editComment: (commentId: string, payload: CommentCreatePayload) => Promise<boolean>;
+  removeComment: (commentId: string) => Promise<boolean>;
 }
 
 export function useTaskMutations(
@@ -106,6 +110,19 @@ export function useTaskMutations(
     );
   }
 
+  async function editComment(
+    commentId: string,
+    payload: CommentCreatePayload,
+  ): Promise<boolean> {
+    return withMutationLifecycle(() =>
+      updateComment(commentId, payload).then(() => void 0),
+    );
+  }
+
+  async function removeComment(commentId: string): Promise<boolean> {
+    return withMutationLifecycle(() => deleteComment(commentId).then(() => void 0));
+  }
+
   return {
     submitting,
     error,
@@ -117,5 +134,7 @@ export function useTaskMutations(
     editMilestone,
     removeMilestone,
     addComment,
+    editComment,
+    removeComment,
   };
 }

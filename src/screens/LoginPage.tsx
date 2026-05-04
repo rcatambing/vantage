@@ -12,7 +12,7 @@ import {
   Intent,
 } from "@blueprintjs/core";
 import { useNavigate } from "react-router";
-import { useApp } from "../context/useApp";
+import { useAuth } from "../context/useAuth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"login" | "forgot" | "assistance">("login");
 
-  const { setAuthenticated } = useApp();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,15 +34,14 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    // Mock authentication — replace with POST /api/auth/login
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
-
-    if (username === "riemann" && password === "Zulu1234") {
-      setAuthenticated(true);
+    try {
+      await login(username.trim(), password);
       navigate("/");
-    } else {
-      setError("Incorrect username or password. Please try again.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Authentication failed.";
+      setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 

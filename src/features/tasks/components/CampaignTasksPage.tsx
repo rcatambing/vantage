@@ -6,12 +6,25 @@ import {
   Callout,
   Intent,
   Tag,
+  HTMLSelect,
+  InputGroup,
+  Checkbox,
+  ControlGroup,
 } from "@blueprintjs/core";
 import { useParams } from "react-router";
-import type { TasksQueryParams } from "../types";
+import type { TasksQueryParams, TaskStatus } from "../types";
 import { useTasks } from "../hooks/useTasks";
 import TaskListTable from "./TaskListTable";
 import TaskCreateDialog from "./TaskCreateDialog";
+
+const STATUS_OPTIONS = [
+  { value: "", label: "All Statuses" },
+  { value: "NOT_STARTED", label: "Not Started" },
+  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "COMPLETED", label: "Completed" },
+  { value: "CANCELLED", label: "Cancelled" },
+  { value: "BLOCKED", label: "Blocked" },
+];
 
 export default function CampaignTasksPage() {
   const { campaignId } = useParams<{ campaignId?: string }>();
@@ -23,6 +36,9 @@ export default function CampaignTasksPage() {
   });
 
   const { data, loading, error } = useTasks(params);
+
+  const hasFilters =
+    params.status || params.assignee_id || params.is_overdue;
 
   return (
     <div style={{ padding: 24 }}>
@@ -50,6 +66,65 @@ export default function CampaignTasksPage() {
             onClick={() => setCreateOpen(true)}
           />
         </div>
+      </div>
+
+      {/* Filter bar */}
+      <div style={{ marginBottom: 16 }}>
+        <ControlGroup fill={false} style={{ gap: 8, flexWrap: "wrap" }}>
+          <HTMLSelect
+            value={params.status ?? ""}
+            onChange={(e) =>
+              setParams((p) => ({
+                ...p,
+                status: (e.target.value as TaskStatus) || undefined,
+                page: 1,
+              }))
+            }
+            options={STATUS_OPTIONS}
+            style={{ width: 150 }}
+          />
+          <InputGroup
+            placeholder="Assignee ID…"
+            value={params.assignee_id ?? ""}
+            onChange={(e) =>
+              setParams((p) => ({
+                ...p,
+                assignee_id: e.target.value || undefined,
+                page: 1,
+              }))
+            }
+            leftIcon="user"
+            small
+            style={{ width: 160 }}
+          />
+          <Checkbox
+            checked={params.is_overdue ?? false}
+            onChange={(e) =>
+              setParams((p) => ({
+                ...p,
+                is_overdue: e.target.checked || undefined,
+                page: 1,
+              }))
+            }
+            label="Overdue only"
+            style={{ margin: "0 8px" }}
+          />
+          {hasFilters && (
+            <Button
+              small
+              minimal
+              icon="filter-remove"
+              text="Clear"
+              onClick={() =>
+                setParams({
+                  campaign_id: campaignId,
+                  page: 1,
+                  page_size: 25,
+                })
+              }
+            />
+          )}
+        </ControlGroup>
       </div>
 
       {/* Content area */}

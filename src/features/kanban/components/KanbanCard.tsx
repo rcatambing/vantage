@@ -87,6 +87,24 @@ export default function KanbanCard({ task, index, onClick }: KanbanCardProps) {
             </div>
           )}
 
+          {/* Due date — amber when overdue */}
+          {task.sla_due_at && (
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 11,
+                color: task.sla_breached
+                  ? "var(--bp5-intent-danger, #da1e28)"
+                  : "var(--kanban-text-secondary, #c6c6c6)",
+              }}
+            >
+              Due: {new Date(task.sla_due_at).toLocaleDateString("en-PH", {
+                month: "short",
+                day: "numeric",
+              })}
+            </div>
+          )}
+
           {task.milestone_count > 0 && (
             <div className="kanban-card-bottom">
               <ProgressBar

@@ -2,7 +2,8 @@ import { lazy, Suspense } from "react";
 import { Classes } from "@blueprintjs/core";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { AppProvider } from "./context/AppContext";
-import { useApp } from "./context/useApp";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./context/useAuth";
 import TopNavbar from "./components/TopNavbar";
 import Sidebar from "./components/Sidebar";
 import ComponentGallery from "./components/ComponentGallery";
@@ -18,6 +19,9 @@ const AnalyticsDemo = lazy(() => import("./screens/AnalyticsDemo"));
 
 const KanbanPage = lazy(() => import("./features/kanban/components/KanbanPage"));
 const TeamsPage = lazy(() => import("./features/teams/components/TeamsPage"));
+const TeamDetailPage = lazy(() => import("./features/teams/components/TeamDetailPage"));
+const StaffRosterPage = lazy(() => import("./features/teams/components/StaffRosterPage"));
+const StaffProfilePage = lazy(() => import("./features/teams/components/StaffProfilePage"));
 const CampaignsPage = lazy(() => import("./features/campaigns/components/CampaignsPage"));
 const CampaignDetailPage = lazy(() => import("./features/campaigns/components/CampaignDetailPage"));
 const CommunityLeadersPage = lazy(() => import("./features/accounts/components/CommunityLeadersPage"));
@@ -33,9 +37,23 @@ const ResourceDetailPage = lazy(() => import("./features/resources/components/Re
 const CampaignTasksPage = lazy(() => import("./features/tasks/components/CampaignTasksPage"));
 const TaskDetailPage = lazy(() => import("./features/tasks/components/TaskDetailPage"));
 const DistrictsPage = lazy(() => import("./features/districts/components/DistrictsPage"));
+const DistrictDetailPage = lazy(() => import("./features/districts/components/DistrictDetailPage"));
 const CalendarPage = lazy(() => import("./features/calendar/components/CalendarPage"));
 const NotificationsPage = lazy(() => import("./features/notifications/components/NotificationsPage"));
 const JobsPage = lazy(() => import("./features/jobs/components/JobsPage"));
+
+/* ─── Epic 7: Voters & Polls ────────────────────────────────────────────── */
+
+const VotersPage = lazy(() => import("./features/voters/components/VotersPage"));
+const VoterDetailPage = lazy(() => import("./features/voters/components/VoterDetailPage"));
+const PollsPage = lazy(() => import("./features/polls/components/PollsPage"));
+const PollDetailPage = lazy(() => import("./features/polls/components/PollDetailPage"));
+
+/* ─── Epic 8: Field Intelligence ────────────────────────────────────────── */
+
+const FieldIntelPage = lazy(() => import("./features/field-intel/components/FieldIntelPage"));
+const AnecdoteDetailPage = lazy(() => import("./features/field-intel/components/AnecdoteDetailPage"));
+const CanvassPage = lazy(() => import("./features/field-intel/components/CanvassPage"));
 
 function PageSpinner() {
   return (
@@ -48,7 +66,17 @@ function PageSpinner() {
 }
 
 function AuthGate() {
-  const { isAuthenticated } = useApp();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <div className="bp5-spinner">
+          <div className="bp5-spinner-animation" />
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <LoginPage />;
@@ -72,6 +100,9 @@ function Shell() {
               <Route path="/report/field-ops" element={<FieldOpsReport />} />
               <Route path="/boards" element={<KanbanPage />} />
               <Route path="/teams" element={<TeamsPage />} />
+              <Route path="/teams/:teamId" element={<TeamDetailPage />} />
+              <Route path="/staff" element={<StaffRosterPage />} />
+              <Route path="/staff/:userId" element={<StaffProfilePage />} />
               <Route path="/campaigns" element={<CampaignsPage />} />
               <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
               <Route path="/campaigns/:campaignId/leaders" element={<CommunityLeadersPage />} />
@@ -88,12 +119,24 @@ function Shell() {
               <Route path="/resources" element={<ResourcesPage />} />
               <Route path="/resources/:id" element={<ResourceDetailPage />} />
               <Route path="/districts" element={<DistrictsPage />} />
+              <Route path="/districts/:id" element={<DistrictDetailPage />} />
               <Route path="/campaigns/:campaignId/calendar" element={<CalendarPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/admin/jobs" element={<JobsPage />} />
               <Route path="/admin/jobs/system" element={<JobsPage category="SYSTEM" />} />
               <Route path="/admin/jobs/metrics" element={<JobsPage category="METRICS" />} />
               <Route path="/analytics/demo" element={<AnalyticsDemo />} />
+
+              {/* Epic 7: Voters & Polls */}
+              <Route path="/campaigns/:campaignId/voters" element={<VotersPage />} />
+              <Route path="/voters/:id" element={<VoterDetailPage />} />
+              <Route path="/campaigns/:campaignId/polls" element={<PollsPage />} />
+              <Route path="/polls/:id" element={<PollDetailPage />} />
+
+              {/* Epic 8: Field Intelligence */}
+              <Route path="/campaigns/:campaignId/field-intel" element={<FieldIntelPage />} />
+              <Route path="/field-intel/:id" element={<AnecdoteDetailPage />} />
+              <Route path="/campaigns/:campaignId/field-intel/canvass" element={<CanvassPage />} />
             </Routes>
           </Suspense>
         </main>
@@ -107,10 +150,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/*" element={<AuthGate />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/*" element={<AuthGate />} />
+          </Routes>
+        </AuthProvider>
       </AppProvider>
     </BrowserRouter>
   );

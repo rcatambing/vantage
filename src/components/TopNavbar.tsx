@@ -16,6 +16,8 @@ import {
   Intent,
 } from "@blueprintjs/core";
 import { useApp } from "../context/useApp";
+import { useAuth } from "../context/useAuth";
+import UserProfileMenu from "./UserProfileMenu";
 import {
   generateDemoTestData,
   isDemoModeEnabled,
@@ -26,6 +28,7 @@ import { appToaster } from "../toaster";
 
 export default function TopNavbar() {
   const { toggleSidebar, setGalleryOpen } = useApp();
+  const { isAuthenticated } = useAuth();
   const [demoEnabled, setDemoEnabled] = useState(isDemoModeEnabled());
 
   async function toggleDemo() {
@@ -115,9 +118,13 @@ export default function TopNavbar() {
             DEMO DATA
           </Tag>
         )}
-        <Popover content={userMenu} placement="bottom-end">
-          <Button icon="user" minimal text="Operator" rightIcon="caret-down" />
-        </Popover>
+        {isAuthenticated ? (
+          <UserProfileMenu />
+        ) : (
+          <Popover content={userMenu} placement="bottom-end">
+            <Button icon="user" minimal text="Operator" rightIcon="caret-down" />
+          </Popover>
+        )}
       </NavbarGroup>
     </Navbar>
   );

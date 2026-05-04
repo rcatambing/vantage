@@ -20,6 +20,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   defaultCampaignId?: string;
+  defaultObjectiveIds?: string[];
 }
 
 const STATUS_OPTIONS = [
@@ -42,6 +43,7 @@ export default function TaskCreateDialog({
   isOpen,
   onClose,
   defaultCampaignId,
+  defaultObjectiveIds: _defaultObjectiveIds,
 }: Props) {
   const navigate = useNavigate();
 

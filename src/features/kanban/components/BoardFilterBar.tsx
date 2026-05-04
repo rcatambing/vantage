@@ -81,7 +81,18 @@ export default function BoardFilterBar({ boardId, filters, onChange }: Props) {
     filters.due_before;
 
   return (
-    <ControlGroup fill={false} style={{ gap: 8, flexWrap: "wrap" }}>
+    <ControlGroup
+      fill={false}
+      style={{
+        gap: 8,
+        flexWrap: "wrap",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+        background: "var(--kanban-board-bg, #161616)",
+        padding: "8px 0",
+      }}
+    >
       <InputGroup
         placeholder="Assignee ID…"
         value={filters.assignee_id ?? ""}
@@ -137,7 +148,13 @@ export default function BoardFilterBar({ boardId, filters, onChange }: Props) {
         style={{ width: 150 }}
       />
       {hasFilters && (
-        <Button small minimal icon="filter-remove" text="Clear" onClick={handleClear} />
+        <Button
+          small
+          minimal
+          icon="filter-remove"
+          text="Clear Filters"
+          onClick={handleClear}
+        />
       )}
     </ControlGroup>
   );

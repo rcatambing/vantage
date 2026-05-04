@@ -56,6 +56,8 @@ export default function MilestoneChecklist({
             gap: 8,
             marginBottom: 12,
           }}
+          aria-live="polite"
+          aria-atomic="true"
         >
           <div
             style={{
@@ -81,7 +83,7 @@ export default function MilestoneChecklist({
             />
           </div>
           <span style={{ fontSize: 12, fontWeight: 600 }}>
-            {completedCount}/{milestones.length}
+            {completedCount}/{milestones.length} ({percent}%)
           </span>
         </div>
       )}
@@ -101,6 +103,7 @@ export default function MilestoneChecklist({
             <Checkbox
               checked={m.is_completed}
               onChange={() => handleToggle(m)}
+              aria-label={`Mark milestone ${m.title} as ${m.is_completed ? "incomplete" : "complete"}`}
               labelElement={
                 <span
                   style={{
@@ -120,6 +123,7 @@ export default function MilestoneChecklist({
               intent={Intent.DANGER}
               onClick={() => handleRemove(m.id)}
               style={{ marginLeft: "auto" }}
+              aria-label={`Delete milestone ${m.title}`}
             />
           </li>
         ))}
@@ -145,6 +149,7 @@ export default function MilestoneChecklist({
           onClick={handleAdd}
           loading={adding}
           disabled={!newTitle.trim()}
+          aria-label="Add new milestone"
         />
       </div>
     </div>

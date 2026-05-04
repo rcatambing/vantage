@@ -4,13 +4,13 @@ import {
   Intent,
   Button,
   Collapse,
-  NonIdealState,
   Spinner,
   Classes,
 } from "@blueprintjs/core";
 import type { Objective, DiagnosticsResponse } from "../types";
 import ObjectiveRow from "./ObjectiveRow";
 import ObjectiveCreateDialog from "./ObjectiveCreateDialog";
+import ObjectiveEmptyState from "./ObjectiveEmptyState";
 
 interface Props {
   objectives: Objective[];
@@ -54,21 +54,10 @@ export default function ObjectivesPanel({
 
   if (objectives.length === 0) {
     return (
-      <>
-        <NonIdealState
-          icon="flag"
-          title="No objectives yet"
-          description="Add at least one objective before activating this campaign."
-          action={
-            !isTerminal ? (
-              <Button
-                icon="plus"
-                intent={Intent.PRIMARY}
-                text="Add Objective"
-                onClick={() => setAddOpen(true)}
-              />
-            ) : undefined
-          }
+      <div aria-live="polite">
+        <ObjectiveEmptyState
+          onAddClick={!isTerminal ? () => setAddOpen(true) : undefined}
+          isTerminal={isTerminal}
         />
         {!isTerminal && (
           <ObjectiveCreateDialog
@@ -78,12 +67,12 @@ export default function ObjectivesPanel({
             onCreated={() => { setAddOpen(false); onRefresh(); }}
           />
         )}
-      </>
+      </div>
     );
   }
 
   return (
-    <div>
+    <div aria-live="polite">
       {/* Add Objective button — hidden for terminal campaign states */}
       {!isTerminal && (
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>

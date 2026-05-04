@@ -4,7 +4,8 @@ import type { CampaignActivity, ActivityListResponse, ActivityParams } from "../
 const BASE = "/activities";
 
 export function fetchActivities(params: ActivityParams): Promise<ActivityListResponse> {
-  const qs = new URLSearchParams({ campaign_id: params.campaign_id || "" });
+  const qs = new URLSearchParams();
+  if (params.campaign_id) qs.set("campaign_id", params.campaign_id);
   if (params.status) qs.set("status", params.status);
   if (params.activity_type) qs.set("activity_type", params.activity_type);
   if (params.from_date) qs.set("from_date", params.from_date);

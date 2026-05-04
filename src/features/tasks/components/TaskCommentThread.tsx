@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextArea, Button, Tag, Classes } from "@blueprintjs/core";
+import { TextArea, Button, Tag, Classes, Intent, Collapse } from "@blueprintjs/core";
 import type { TaskComment } from "../types";
 import { useTaskMutations } from "../hooks/useTaskMutations";
 
@@ -32,9 +32,14 @@ export default function TaskCommentThread({
   comments,
   onMutate,
 }: Props) {
-  const { addComment } = useTaskMutations({ onSuccess: onMutate });
+  const { addComment, editComment, removeComment } = useTaskMutations({
+    onSuccess: onMutate,
+  });
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [expandedHistory, setExpandedHistory] = useState<Set<string>>(new Set());
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -43,6 +48,30 @@ export default function TaskCommentThread({
     await addComment(taskId, { content: text });
     setSending(false);
     setDraft("");
+  };
+
+  const startEdit = (comment: TaskComment) => {
+    setEditingId(comment.id);
+    setEditDraft(comment.content);
+  };
+
+  const saveEdit = async (commentId: string) => {
+    const text = editDraft.trim();
+    if (!text) return;
+    const success = await editComment(commentId, { content: text });
+    if (success) setEditingId(null);
+  };
+
+  const toggleHistory = (commentId: string) => {
+    setExpandedHistory((prev) => {
+      const next = new Set(prev);
+      if (next.has(commentId)) {
+        next.delete(commentId);
+      } else {
+        next.add(commentId);
+      }
+      return next;
+    });
   };
 
   return (
@@ -99,12 +128,115 @@ export default function TaskCommentThread({
                 {formatTime(c.created_at)}
               </span>
               {c.updated_at && c.updated_at !== c.created_at && (
-                <Tag minimal style={{ fontSize: 11 }}>
-                  edited
-                </Tag>
+                <Button
+                  minimal
+                  small
+                  style={{ fontSize: 11, padding: 0, minHeight: 18 }}
+                  onClick={() => toggleHistory(c.id)}
+                >
+                  <Tag minimal style={{ fontSize: 11 }}>
+                    Edited
+                  </Tag>
+                </Button>
               )}
+              <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+                {editingId !== c.id && (
+                  <>
+                    <Button
+                      icon="edit"
+                      minimal
+                      small
+                      onClick={() => startEdit(c)}
+                      aria-label={`Edit comment by ${c.full_name}`}
+                    />
+                    <Button
+                      icon="trash"
+                      minimal
+                      small
+                      intent={Intent.DANGER}
+                      onClick={() => removeComment(c.id)}
+                      aria-label={`Delete comment by ${c.full_name}`}
+                    />
+                  </>
+                )}
+              </div>
             </div>
-            <div style={{ fontSize: 13, lineHeight: 1.5 }}>{c.content}</div>
+
+            {editingId === c.id ? (
+              <div>
+                <TextArea
+                  fill
+                  rows={2}
+                  value={editDraft}
+                  onChange={(e) => setEditDraft(e.target.value)}
+                  autoFocus
+                />
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <Button
+                    small
+                    intent={Intent.PRIMARY}
+                    text="Save"
+                    onClick={() => saveEdit(c.id)}
+                    disabled={!editDraft.trim()}
+                  />
+                  <Button
+                    small
+                    minimal
+                    text="Cancel"
+                    onClick={() => setEditingId(null)}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, lineHeight: 1.5 }}>{c.content}</div>
+            )}
+
+            {/* Edit history */}
+            {c.edit_history && c.edit_history.length > 0 && (
+              <Collapse isOpen={expandedHistory.has(c.id)}>
+                <div
+                  style={{
+                    marginTop: 8,
+                    padding: "8px 12px",
+                    background: "var(--cds-layer-01, #262626)",
+                    fontSize: 12,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "var(--cds-text-secondary, #c6c6c6)",
+                      marginBottom: 6,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    Edit History
+                  </div>
+                  {c.edit_history.map((entry, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "4px 0",
+                        borderBottom:
+                          idx < c.edit_history!.length - 1
+                            ? "1px solid var(--cds-border-subtle, #393939)"
+                            : undefined,
+                      }}
+                    >
+                      <div
+                        className={Classes.TEXT_MUTED}
+                        style={{ fontSize: 11, marginBottom: 2 }}
+                      >
+                        {formatTime(entry.edited_at)}
+                      </div>
+                        <div>{entry.previous_content}</div>
+                    </div>
+                  ))}
+                </div>
+              </Collapse>
+            )}
           </div>
         </div>
       ))}

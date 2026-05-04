@@ -1,8 +1,10 @@
-import { Button, Menu, MenuItem, Popover } from "@blueprintjs/core";
+import { useState } from "react";
+import { Button } from "@blueprintjs/core";
 import { Droppable } from "@hello-pangea/dnd";
 import type { BoardColumn, KanbanTask } from "../types";
 import KanbanCard from "./KanbanCard";
 import { ColumnHeaderBadge } from "./ColumnHeaderBadge";
+import ColumnAdminPanel from "./ColumnAdminPanel";
 
 interface KanbanColumnProps {
   column: BoardColumn;
@@ -11,22 +13,23 @@ interface KanbanColumnProps {
 }
 
 export default function KanbanColumn({ column, onCardClick, onAddTask }: KanbanColumnProps) {
-  const columnMenu = (
-    <Menu>
-      <MenuItem icon="edit" text="Rename column" />
-      <MenuItem icon="trash" text="Delete column" intent="danger" />
-    </Menu>
-  );
+  const [adminOpen, setAdminOpen] = useState(false);
 
   return (
     <div className="kanban-column">
       <div className="kanban-column-header">
         <h3 className="kanban-column-title">{column.title}</h3>
         <ColumnHeaderBadge count={column.tasks.length} />
-        <Popover content={columnMenu} placement="bottom-end" minimal>
-          <Button icon="cog" minimal small aria-label="Column settings" />
-        </Popover>
+        <Button
+          icon="cog"
+          minimal
+          small
+          aria-label="Open column settings"
+          onClick={() => setAdminOpen(true)}
+        />
       </div>
+
+      <ColumnAdminPanel isOpen={adminOpen} onClose={() => setAdminOpen(false)} />
 
       <Droppable droppableId={String(column.id)}>
         {(provided, snapshot) => (

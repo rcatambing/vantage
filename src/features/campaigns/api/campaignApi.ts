@@ -77,6 +77,21 @@ export function deleteCampaign(id: number): Promise<StatusUpdateResponse> {
   return apiFetch<StatusUpdateResponse>(`/campaigns/${id}`, { method: "DELETE" });
 }
 
+export function updateCampaign(
+  id: number,
+  payload: {
+    name: string;
+    description: string | null;
+    target_start: string;
+    target_completion: string;
+  }
+): Promise<{ message: string; data: Campaign }> {
+  return apiFetch<{ message: string; data: Campaign }>(`/campaigns/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function getObjectives(campaignId: number): Promise<Objective[]> {
   return apiFetch<ListResponseWire<Objective>>(`/campaigns/${campaignId}/objectives`).then(
     normalizeListResponse

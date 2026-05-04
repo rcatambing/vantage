@@ -33,6 +33,8 @@ import {
   CAMPAIGN_TYPE_LABEL,
 } from "../types";
 import ObjectivesPanel from "./ObjectivesPanel";
+import CampaignEditDialog from "./CampaignEditDialog";
+import CampaignErrorBoundary from "./CampaignErrorBoundary";
 import { appToaster } from "../../../toaster";
 
 function formatDate(iso: string | null): string {
@@ -71,6 +73,7 @@ export default function CampaignDetailPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
 
   // Wrap all status-changing API calls with loading + error toast
   // Must be declared before early returns to satisfy Rules of Hooks.
@@ -207,7 +210,8 @@ export default function CampaignDetailPage() {
   );
 
   return (
-    <div style={{ padding: 24 }}>
+    <CampaignErrorBoundary>
+      <div style={{ padding: 24 }}>
       {/* Back navigation */}
       <div style={{ marginBottom: 12 }}>
         <Button
@@ -286,6 +290,13 @@ export default function CampaignDetailPage() {
               {campaign.campaign_status === "PLANNED" && (
                 <>
                   <Button
+                    icon="edit"
+                    minimal
+                    text="Edit"
+                    onClick={() => setEditOpen(true)}
+                    disabled={actionLoading}
+                  />
+                  <Button
                     intent={Intent.SUCCESS}
                     icon="play"
                     text="Activate"
@@ -302,6 +313,13 @@ export default function CampaignDetailPage() {
               {/* ACTIVE: Put On Hold + Mark Complete + overflow */}
               {campaign.campaign_status === "ACTIVE" && (
                 <>
+                  <Button
+                    icon="edit"
+                    minimal
+                    text="Edit"
+                    onClick={() => setEditOpen(true)}
+                    disabled={actionLoading}
+                  />
                   <ButtonGroup>
                     <Button
                       icon="pause"
@@ -326,6 +344,13 @@ export default function CampaignDetailPage() {
               {/* ON_HOLD: Resume + overflow */}
               {campaign.campaign_status === "ON_HOLD" && (
                 <>
+                  <Button
+                    icon="edit"
+                    minimal
+                    text="Edit"
+                    onClick={() => setEditOpen(true)}
+                    disabled={actionLoading}
+                  />
                   <Button
                     intent={Intent.SUCCESS}
                     icon="play"
@@ -416,6 +441,17 @@ export default function CampaignDetailPage() {
           </Callout>
         )}
       </Alert>
+
+      <CampaignEditDialog
+        isOpen={editOpen}
+        campaign={campaign}
+        onClose={() => setEditOpen(false)}
+        onUpdated={() => {
+          refetchCampaign();
+          refetchObjectives();
+        }}
+      />
     </div>
+    </CampaignErrorBoundary>
   );
 }

@@ -1,6 +1,10 @@
 export function ColumnHeaderBadge({ count }: { count: number }) {
   return (
-    <span className="bp5-tag bp5-minimal" style={{ marginLeft: 6 }}>
+    <span
+      className="bp5-tag bp5-minimal"
+      style={{ marginLeft: 6, fontSize: 12 }}
+      aria-label={`${count} cards`}
+    >
       {count}
     </span>
   );
