@@ -32,6 +32,10 @@ const ResourcesPage = lazy(() => import("./features/resources/components/Resourc
 const ResourceDetailPage = lazy(() => import("./features/resources/components/ResourceDetailPage"));
 const CampaignTasksPage = lazy(() => import("./features/tasks/components/CampaignTasksPage"));
 const TaskDetailPage = lazy(() => import("./features/tasks/components/TaskDetailPage"));
+const DistrictsPage = lazy(() => import("./features/districts/components/DistrictsPage"));
+const CalendarPage = lazy(() => import("./features/calendar/components/CalendarPage"));
+const NotificationsPage = lazy(() => import("./features/notifications/components/NotificationsPage"));
+const JobsPage = lazy(() => import("./features/jobs/components/JobsPage"));
 
 function PageSpinner() {
   return (
@@ -83,6 +87,12 @@ function Shell() {
               <Route path="/offices/:id" element={<OfficeDetailPage />} />
               <Route path="/resources" element={<ResourcesPage />} />
               <Route path="/resources/:id" element={<ResourceDetailPage />} />
+              <Route path="/districts" element={<DistrictsPage />} />
+              <Route path="/campaigns/:campaignId/calendar" element={<CalendarPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/admin/jobs" element={<JobsPage />} />
+              <Route path="/admin/jobs/system" element={<JobsPage category="SYSTEM" />} />
+              <Route path="/admin/jobs/metrics" element={<JobsPage category="METRICS" />} />
               <Route path="/analytics/demo" element={<AnalyticsDemo />} />
             </Routes>
           </Suspense>

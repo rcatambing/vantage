@@ -47,12 +47,15 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
     items: [
       { icon: "office", text: "Offices", path: "/offices" },
       { icon: "box", text: "Resources", path: "/resources" },
+      { icon: "map", text: "Districts", path: "/districts" },
+      { icon: "calendar", text: "Calendar", path: "/campaigns/:campaignId/calendar", campaignScoped: true },
     ],
   },
   {
     label: "Management",
     items: [
       { icon: "people", text: "Teams Directory", path: "/teams" },
+      { icon: "notifications", text: "Notifications", path: "/notifications" },
     ],
   },
   {
@@ -66,6 +69,13 @@ const SECTIONS: { label: string; items: NavItem[] }[] = [
     label: "Reports",
     items: [
       { icon: "document", text: "Field Ops Report", path: "/report/field-ops" },
+    ],
+  },
+  {
+    label: "Administration",
+    items: [
+      { icon: "cog", text: "System Jobs", path: "/admin/jobs/system" },
+      { icon: "chart", text: "Metrics Jobs", path: "/admin/jobs/metrics" },
     ],
   },
   {
