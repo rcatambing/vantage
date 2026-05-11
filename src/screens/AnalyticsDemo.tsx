@@ -78,12 +78,14 @@ import N19Panel from "../features/analytics/n19/components/N19Panel";
 import N20Panel from "../features/analytics/n20/components/N20Panel";
 import N21Panel from "../features/analytics/n21/components/N21Panel";
 import N22Panel from "../features/analytics/n22/components/N22Panel";
+import N23Panel from "../features/analytics/n23/components/N23Panel";
 import N24Panel from "../features/analytics/n24/components/N24Panel";
 import N25Panel from "../features/analytics/n25/components/N25Panel";
 import N26Panel from "../features/analytics/n26/components/N26Panel";
 import N27Panel from "../features/analytics/n27/components/N27Panel";
 import N28Panel from "../features/analytics/n28/components/N28Panel";
 import N29Panel from "../features/analytics/n29/components/N29Panel";
+import N30Panel from "../features/analytics/n30/components/N30Panel";
 import N31Panel from "../features/analytics/n31/components/N31Panel";
 import N32Panel from "../features/analytics/n32/components/N32Panel";
 import N33Panel from "../features/analytics/n33/components/N33Panel";
@@ -463,6 +465,10 @@ export default function AnalyticsDemo() {
         <N22Panel campaignId={campaignId} />
       </section>
 
+      <section aria-label="N23 - Fieldwork Signal Conversion Rate">
+        <N23Panel campaignId={campaignId} />
+      </section>
+
       <section aria-label="N24 - Task Cancellation Shock Index">
         <N24Panel campaignId={campaignId} />
       </section>
@@ -485,6 +491,10 @@ export default function AnalyticsDemo() {
 
       <section aria-label="N29 - Derived Signal Override Rate">
         <N29Panel campaignId={campaignId} />
+      </section>
+
+      <section aria-label="N30 - Signal Override Authority">
+        <N30Panel campaignId={campaignId} />
       </section>
 
       <section aria-label="N31 - District Winnability Composite">

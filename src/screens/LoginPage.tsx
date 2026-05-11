@@ -24,7 +24,21 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"login" | "forgot" | "assistance">("login");
 
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
+
+  const handleDemoLogin = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await demoLogin();
+      navigate("/");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Demo login failed.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,6 +141,17 @@ export default function LoginPage() {
                 fill
                 large
                 loading={loading}
+                style={{ marginTop: 8 }}
+              />
+
+              <Button
+                type="button"
+                text="Demo Access"
+                icon="play"
+                fill
+                large
+                loading={loading}
+                onClick={handleDemoLogin}
                 style={{ marginTop: 8 }}
               />
 

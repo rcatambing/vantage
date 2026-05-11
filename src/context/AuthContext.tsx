@@ -121,6 +121,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
+  const demoLogin = useCallback(async () => {
+    const demoUser: User = {
+      id: "demo-001",
+      username: "demo",
+      full_name: "Demo User",
+      email: "demo@kampanya360.com",
+      system_role: "MANAGER",
+    };
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    setUser(demoUser);
+
+    const toaster = await appToaster;
+    toaster.show({
+      message: "Welcome to the Vantage demo",
+      intent: "success",
+    });
+  }, []);
+
   const hasRole = useCallback(
     (roles: SystemRole[]) => {
       if (!user) return false;
@@ -142,6 +160,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isAuthenticated: !!user,
     isLoading,
     login,
+    demoLogin,
     logout,
     hasRole,
     hasAnyRole,

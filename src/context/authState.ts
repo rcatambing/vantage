@@ -19,6 +19,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
+  demoLogin: () => Promise<void>;
   logout: () => void;
   hasRole: (roles: SystemRole[]) => boolean;
   hasAnyRole: (roles: SystemRole[]) => boolean;
